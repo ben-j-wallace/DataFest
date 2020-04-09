@@ -9,9 +9,10 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-```{r upload packages}
+```{r upload packages, results = "hide"}
 library(dplyr)
 library(ggplot2)
+library(patchwork)
 ```
 
 ```{r}
@@ -20,5 +21,28 @@ states <- read.csv("datafiles/us-states.csv")
 ```
 
 ```{r}
+toptencounties <- counties %>%
+  filter(date == "2020-04-08") %>%
+  arrange(desc(cases))
+  
+toptencounties <- toptencounties[1:10,]
 
+toptenstates <- states %>%
+  filter(date == "2020-04-08") %>%
+  arrange(desc(cases))
+
+toptenstates <- toptenstates[1:10,]
 ```
+
+```{r}
+p1 <- ggplot(data = toptencounties, mapping = aes(x = county, y = cases)) +
+  geom_bar(stat = "identity") +
+  coord_flip()
+
+p2 <- ggplot(data = toptenstates, mapping = aes(x = state, y = cases)) +
+  geom_bar(stat = "identity") +
+  coord_flip() 
+
+p1 + p2
+```
+
