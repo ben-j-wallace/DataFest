@@ -14,3 +14,11 @@ library(dplyr)
 library(ggplot2)
 ```
 
+```{r}
+counties <- read.csv("datafiles/us-counties.csv")
+states <- read.csv("datafiles/us-states.csv")
+```
+
+```{r}
+
+```
