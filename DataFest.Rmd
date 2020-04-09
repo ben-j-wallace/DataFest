@@ -1,0 +1,16 @@
+---
+title: "DataFest"
+author: "Albert Sun and Ben Wallace"
+date: "4/9/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r upload packages}
+library(dplyr)
+library(ggplot2)
+```
+
