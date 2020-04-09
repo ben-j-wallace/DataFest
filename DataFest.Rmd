@@ -22,3 +22,19 @@ states <- read.csv("datafiles/us-states.csv")
 ```{r}
 
 ```
+
+```{r counties_death}
+counties_topTen_death <- counties %>%
+  filter(date == "2020-04-08") %>%
+  arrange(-deaths) %>%
+  slice(1:10)
+
+counties_death %>%
+  ggplot(mapping = aes(x = reorder(county, deaths), y = deaths)) +
+  geom_bar(stat = "identity") + 
+  theme_minimal() + 
+  labs(title = "Coronavirus in specific counties", 
+       y = "Deaths", x = "County Name")
+
+```
+
