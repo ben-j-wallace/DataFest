@@ -18,6 +18,7 @@ library(patchwork)
 ```{r read files}
 counties <- read.csv("datafiles/us-counties.csv")
 states <- read.csv("datafiles/us-states.csv")
+measures <- read.csv("datafiles/statedata.csv")
 ```
 
 ```{r topten}
@@ -50,4 +51,5 @@ p2 <- ggplot(data = toptenstates, mapping = aes(x = reorder(state, cases), y = c
 
 p1 + p2
 ```
+
 
