@@ -9,32 +9,45 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-```{r upload packages}
+```{r upload packages, results = "hide"}
 library(dplyr)
 library(ggplot2)
+library(patchwork)
 ```
 
-```{r}
+```{r read files}
 counties <- read.csv("datafiles/us-counties.csv")
 states <- read.csv("datafiles/us-states.csv")
 ```
 
-```{r}
+```{r topten}
+toptencounties <- counties %>%
+  filter(date == "2020-04-08") %>%
+  arrange(desc(cases))
+  
+toptencounties <- toptencounties[1:10,]
 
+toptenstates <- states %>%
+  filter(date == "2020-04-08") %>%
+  arrange(desc(cases))
+
+toptenstates <- toptenstates[1:10,]
 ```
 
-```{r counties_death}
-counties_topTen_death <- counties %>%
-  filter(date == "2020-04-08") %>%
-  arrange(-deaths) %>%
-  slice(1:10)
 
-counties_death %>%
-  ggplot(mapping = aes(x = reorder(county, deaths), y = deaths)) +
+```{r plot}
+p1 <- ggplot(data = toptencounties, mapping = aes(x = reorder(county, cases), y = cases)) +
   geom_bar(stat = "identity") + 
-  theme_minimal() + 
-  labs(title = "Coronavirus in specific counties", 
-       y = "Deaths", x = "County Name")
+  labs(title = "Top 10 Coronavirus counties cases", 
+       y = "Deaths", x = "County Name") + 
+  coord_flip()
 
+p2 <- ggplot(data = toptenstates, mapping = aes(x = reorder(state, cases), y = cases)) +
+  geom_bar(stat = "identity") + 
+  labs(title = "Top 10 Coronavirus states cases", 
+       y = "Deaths", x = "State Name") + 
+  coord_flip() 
+
+p1 + p2
 ```
 
