@@ -40,16 +40,27 @@ toptenstates <- toptenstates[1:10,]
 p1 <- ggplot(data = toptencounties, mapping = aes(x = reorder(county, cases), y = cases)) +
   geom_bar(stat = "identity") + 
   labs(title = "Top 10 Coronavirus counties cases", 
-       y = "Deaths", x = "County Name") + 
+       y = "Cases", x = "County Name") + 
   coord_flip()
 
 p2 <- ggplot(data = toptenstates, mapping = aes(x = reorder(state, cases), y = cases)) +
   geom_bar(stat = "identity") + 
   labs(title = "Top 10 Coronavirus states cases", 
-       y = "Deaths", x = "State Name") + 
+       y = "Cases", x = "State Name") + 
   coord_flip() 
 
 p1 + p2
+```
+
+```{r plot measures} 
+### Removing United States from df
+
+measures <- measures[-c(1),]
+
+### Adding data to measures df
+measures <- measures %>%
+  mutate(date.stay.at.home = "") 
+
 ```
 
 
