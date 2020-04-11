@@ -16,6 +16,10 @@ library(patchwork)
 library(twitteR)
 library(lubridate)
 library(rvest)
+library(sf)
+library(tidycensus)
+library(leaflet)
+library(mapview)
 ```
 
 ```{r read files, results = "hide"}
@@ -194,4 +198,12 @@ characters <- html_text(html, ".iLEVuK:nth-child(9) .blyETw:nth-child(1) , .iLEV
 characters
 ```
 
+```{r}
+covidapproval <- covidapproval %>%
+  arrange(desc(TrumpCOVID))
 
+covidapproval$State = covidapproval$ï..State 
+
+ggplot(data = covidapproval, aes(x = State, y = TrumpCOVID)) +
+  geom_point() 
+```
