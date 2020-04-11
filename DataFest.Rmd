@@ -52,7 +52,7 @@ p2 <- ggplot(data = toptenstates, mapping = aes(x = reorder(state, cases), y = c
 p1 + p2
 ```
 
-```{r plot measures} 
+```{r addmeasures} 
 ### Removing United States from df
 
 measures <- measures[-c(1),]
@@ -117,8 +117,18 @@ measures <- measures %>%
 
 ```
 
-```{r}
-ggplot(data = measures, aes(x = stateno, y = date.stay.at.home)) +
-         geom_point()
+```{r plotstayathome}
+### Plot of stay at home dates
+
+measures$date.stay.at.home = as.Date(measures$date.stay.at.home, "%m/%d/%y")
+med <- median(measures$date.stay.at.home, na.rm = TRUE)
+avg <- mean(measures$date.stay.at.home, na.rm = TRUE)
+
+ggplot(data = measures, aes(x = date.stay.at.home)) +
+         geom_histogram(stat = "count") +
+   scale_x_date(breaks = "3 days") +
+  theme(axis.text.x = element_text(angle = 90)) + 
+  geom_vline(xintercept = med, color = "darkred") +
+  geom_vline(xintercept = avg, color = "navy")
 
 ```
