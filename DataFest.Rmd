@@ -23,6 +23,7 @@ counties <- read.csv("datafiles/us-counties.csv")
 states <- read.csv("datafiles/us-states.csv")
 measures <- read.csv("datafiles/statedata.csv")
 global_measures <- read.csv("datafiles/ACAPSGlobalResponse.csv")
+covidapproval <- read.csv("datafiles/Covidapproval.csv")
 ```
 
 ```{r topten}
@@ -192,4 +193,5 @@ html_nodes(html, "igc-y-axis-text") %>%
    html_text()
 
 ```
+
 
