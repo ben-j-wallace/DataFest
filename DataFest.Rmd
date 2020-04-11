@@ -13,6 +13,7 @@ knitr::opts_chunk$set(echo = TRUE)
 library(dplyr)
 library(ggplot2)
 library(patchwork)
+library(janitor)
 ```
 
 ```{r read files}
@@ -20,6 +21,20 @@ counties <- read.csv("datafiles/us-counties.csv")
 states <- read.csv("datafiles/us-states.csv")
 measures <- read.csv("datafiles/statedata.csv")
 ```
+
+```{r}
+measures <- measures %>% 
+  select("Location") %>%
+  clean_names()
+```
+
+```{r}
+counties %>%
+  filter(county=="Tarrant") %>%
+  ggplot(mapping = aes(x = date, y = cases)) + 
+  geom_point()
+```
+
 
 ```{r topten}
 toptencounties <- counties %>%
