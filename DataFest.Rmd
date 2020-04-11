@@ -55,16 +55,85 @@ toptenstates <- toptenstates[1:10,]
 p1 <- ggplot(data = toptencounties, mapping = aes(x = reorder(county, cases), y = cases)) +
   geom_bar(stat = "identity") + 
   labs(title = "Top 10 Coronavirus counties cases", 
-       y = "Deaths", x = "County Name") + 
+       y = "Cases", x = "County Name") + 
   coord_flip()
 
 p2 <- ggplot(data = toptenstates, mapping = aes(x = reorder(state, cases), y = cases)) +
   geom_bar(stat = "identity") + 
   labs(title = "Top 10 Coronavirus states cases", 
-       y = "Deaths", x = "State Name") + 
+       y = "Cases", x = "State Name") + 
   coord_flip() 
 
 p1 + p2
 ```
 
+```{r plot measures} 
+### Removing United States from df
 
+measures <- measures[-c(1),]
+
+dates <- c("4/4/2020 17:00", # Dates of stay at home orders
+           "3/28/2020 17:00",
+           "3/31/2020 17:00",
+           "",
+           "3/19/2020 0:00",
+           "3/26/2020 6:00",
+           "3/23/2020 20:00",
+           "3/24/2020 8:00",
+           "4/1/2020 0:01",
+           "4/3/2020 0:01",
+           "4/3/2020 0:00",
+           "3/25/2020 0:01",
+           "3/25/2020 13:30",
+           "3/21/2020 17:00",
+           "3/24/2020 23:59",
+           "",
+           "3/30/2020 0:01",
+           "3/26/2020 20:00",
+           "3/23/2020 17:00",
+           "4/2/2020 0:01",
+           "3/30/2020 20:00",
+           "3/23/2020 12:00",
+           "3/24/2020 0:01",
+           "3/27/2020 23:59",
+           "4/3/2020 17:00",
+           "4/6/2020 0:01",
+           "3/28/2020 0:01",
+           "",
+           "4/1/2020 0:00",
+           "3/27/2020 23:59",
+           "3/21/2020 21:00",
+           "3/24/2020 8:00",
+           "3/22/2020 20:00",
+           "3/30/2020 15:00",
+           "",
+           "3/23/2020 23:59",
+           "",
+           "3/23/2020 0:00",
+           "4/1/2020 20:00",
+           "3/28/2020 0:00",
+           "4/7/2020 17:00",
+           "",
+           "3/31/2020 23:59",
+           "4/2/2020 0:01",
+           "",
+           "3/25/2020 17:00",
+           "3/30/2020 0:00",
+           "3/23/2020 0:00",
+           "3/24/2020 20:00",
+           "3/25/2020 8:00",
+           ""
+           )
+
+### Adding data to measures df
+measures <- measures %>%
+  mutate(date.stay.at.home = dates)  %>%
+  mutate(stateno = c(1:51))
+
+```
+
+```{r}
+ggplot(data = measures, aes(x = stateno, y = date.stay.at.home)) +
+         geom_point()
+
+```
