@@ -185,13 +185,13 @@ ggplot(first_measures, mapping = aes(x = reorder(COUNTRY, date), y = date)) +
 
 # RVest
 
-```{r}
-governor_poll <- "https://www.msn.com/en-us/news/coronavirus/governors-average-27-percentage-points-higher-in-approval-for-covid-19-response-than-president-trump/ar-BB125j1Z?li=BBnb7Kz"
+```{r Webscraping}
+civiqs_poll <- "https://civiqs.com/results/approve_president_trump?annotations=true&uncertainty=true&zoomIn=true"
+html <- read_html(civiqs_poll)
 
-html <- read_html(governor_poll)
-html_nodes(html, "igc-y-axis-text") %>%
-   html_text()
+characters <- html_text(html, ".iLEVuK:nth-child(9) .blyETw:nth-child(1) , .iLEVuK:nth-child(9) .kTXupV:nth-child(1) , .iLEVuK:nth-child(9) .eafFIQ")
 
+characters
 ```
 
 
