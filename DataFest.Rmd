@@ -13,28 +13,16 @@ knitr::opts_chunk$set(echo = TRUE)
 library(dplyr)
 library(ggplot2)
 library(patchwork)
-library(janitor)
+library(twitteR)
+library(lubridate)
 ```
 
-```{r read files}
+```{r read files, results = "hide"}
 counties <- read.csv("datafiles/us-counties.csv")
 states <- read.csv("datafiles/us-states.csv")
 measures <- read.csv("datafiles/statedata.csv")
+global_measures <- read.csv("datafiles/ACAPSGlobalResponse.csv")
 ```
-
-```{r}
-measures <- measures %>% 
-  select("Location") %>%
-  clean_names()
-```
-
-```{r}
-counties %>%
-  filter(county=="Tarrant") %>%
-  ggplot(mapping = aes(x = date, y = cases)) + 
-  geom_point()
-```
-
 
 ```{r topten}
 toptencounties <- counties %>%
@@ -52,7 +40,7 @@ toptenstates <- toptenstates[1:10,]
 
 
 ```{r plot}
-p1 <- ggplot(data = toptencounties, mapping = aes(x = reorder(county, cases), y = cases)) +
+p1 <- ggplot(data = toptencounties, mapping = aes(x = reorder(county, cases), y = cases), fill=if_else(County=="New York")) +
   geom_bar(stat = "identity") + 
   labs(title = "Top 10 Coronavirus counties cases", 
        y = "Cases", x = "County Name") + 
@@ -137,3 +125,42 @@ ggplot(data = measures, aes(x = stateno, y = date.stay.at.home)) +
          geom_point()
 
 ```
+
+TwitteR:
+
+https://opensource.com/article/17/6/collecting-and-mapping-twitter-data-using-r
+
+**I'm still applying for a Twitter dev account in order to access the Twitter API**
+
+```{r countries_most_social_distancing}
+global_measures %>%
+  filter(CATEGORY == "Social distancing") %>%
+  count(COUNTRY) %>%
+  arrange(-n)
+```
+
+First Social Distancing Measure From top-10 quickest and top-10 slowest Country 
+to test responsiveness:
+
+```{r convert_dates_to_ordered_lubridate}
+first_measures <- global_measures %>%
+  filter(CATEGORY == "Social distancing") %>%
+  mutate(date = dmy(DATE_IMPLEMENTED)) %>%
+  arrange(COUNTRY, date) %>%
+  select(COUNTRY, date) %>%
+  group_by(COUNTRY) %>%
+  slice(1) %>%
+  ungroup() %>%
+  select(COUNTRY, date) %>%
+  arrange(date) %>%
+  slice(-11:-n()-10)
+```
+
+```{r top_bottom_10_reactions}
+ggplot(first_measures, mapping = aes(x = reorder(COUNTRY, date), y = date)) +
+  geom_point() + coord_flip() + 
+  labs(y = "1st Social Distancing Measure Date", x = "Country",
+       title = "1st Social Distancing Implemented") + 
+  theme_minimal(base_size = 14)
+```
+
