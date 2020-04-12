@@ -209,18 +209,16 @@ characters
 ggplot(data = covidapproval, aes(x = reorder(State, TrumpCOVID))) +
   geom_bar(stat = "identity", aes(y = TrumpCOVID), fill = "red", color = "red", alpha = 0.2) +
   geom_point(stat = "identity", aes(y = Trumpapprov), color = "black") +
-<<<<<<< HEAD
   theme(axis.text.x = element_text(angle = 90)) +
   labs(x = "State",
        y = "Percent Approval",
-       title = "Trump 'Rona and non-'Rona Approval"
-  )
-=======
+       title = "Trump 'Rona and non-'Rona Approval") +
   theme(axis.text.x = element_text(angle = 90)) + 
   labs(title = "Trump Approval Ratings vs. Without", x = "State",
        y = "Approval Rating") + 
   theme(legend.position="right")
 ```
+
 # Jail Data
 
 ```{r Overview of Data}
@@ -242,5 +240,4 @@ ggplot(data = topTenJails, mapping = aes(x = reorder(County, Percentage.Change),
   coord_flip() + 
   labs(x = "County", y = "Percent Decrease in Prisons", 
        title = "Top Ten Drops in Incarceration Rates in County Jails") 
->>>>>>> 05b4cf10f552b7cf745febed35c75eb1adeeb704
 ```
