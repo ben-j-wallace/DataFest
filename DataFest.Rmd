@@ -29,7 +29,8 @@ counties <- read.csv("datafiles/us-counties.csv")
 states <- read.csv("datafiles/us-states.csv")
 measures <- read.csv("datafiles/statedata.csv")
 global_measures <- read.csv("datafiles/ACAPSGlobalResponse.csv")
-covidapproval <- read.csv("datafiles/Covidapproval.csv")
+covidapproval <- read.csv("datafiles/Covidapproval_Population.csv")
+jails <- read.csv("datafiles/DataFest Covid in Jails - Sheet1.csv")
 ```
 
 ```{r topten}
@@ -200,17 +201,46 @@ characters <- html_text(html, ".iLEVuK:nth-child(9) .blyETw:nth-child(1) , .iLEV
 characters
 ```
 
+# Trump approval Ratings
+
 ```{r} 
 ### Plot of Trump approval rona vs. non-rona
-
-covidapproval$State = covidapproval$ï..State 
 
 ggplot(data = covidapproval, aes(x = reorder(State, TrumpCOVID))) +
   geom_bar(stat = "identity", aes(y = TrumpCOVID), fill = "red", color = "red", alpha = 0.2) +
   geom_point(stat = "identity", aes(y = Trumpapprov), color = "black") +
+<<<<<<< HEAD
   theme(axis.text.x = element_text(angle = 90)) +
   labs(x = "State",
        y = "Percent Approval",
        title = "Trump 'Rona and non-'Rona Approval"
   )
+=======
+  theme(axis.text.x = element_text(angle = 90)) + 
+  labs(title = "Trump Approval Ratings vs. Without", x = "State",
+       y = "Approval Rating") + 
+  theme(legend.position="right")
+```
+# Jail Data
+
+```{r Overview of Data}
+jails %>%
+  summarise(n(), n_distinct(State)) 
+```
+
+We have data from 334 counties from 27 states.
+
+```{r}
+topTenJails <- jails %>%
+  arrange(Percentage.Change) %>%
+  select(State, County, Percentage.Change) %>%
+  slice(1:10)
+
+ggplot(data = topTenJails, mapping = aes(x = reorder(County, Percentage.Change), 
+                                         y = abs(Percentage.Change) * 100)) + 
+  geom_bar(stat = "identity") +
+  coord_flip() + 
+  labs(x = "County", y = "Percent Decrease in Prisons", 
+       title = "Top Ten Drops in Incarceration Rates in County Jails") 
+>>>>>>> 05b4cf10f552b7cf745febed35c75eb1adeeb704
 ```
