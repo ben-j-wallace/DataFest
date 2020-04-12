@@ -206,7 +206,11 @@ characters
 covidapproval$State = covidapproval$ï..State 
 
 ggplot(data = covidapproval, aes(x = reorder(State, TrumpCOVID))) +
-  geom_bar(stat = "identity", aes(y = TrumpCOVID), fill = "red", alpha = 0.2) +
+  geom_bar(stat = "identity", aes(y = TrumpCOVID), fill = "red", color = "red", alpha = 0.2) +
   geom_point(stat = "identity", aes(y = Trumpapprov), color = "black") +
-  theme(axis.text.x = element_text(angle = 90))
+  theme(axis.text.x = element_text(angle = 90)) +
+  labs(x = "State",
+       y = "Percent Approval",
+       title = "Trump 'Rona and non-'Rona Approval"
+  )
 ```
