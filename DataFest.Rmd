@@ -2,7 +2,9 @@
 title: "DataFest"
 author: "Albert Sun and Ben Wallace"
 date: "4/9/2020"
-output: html_document
+output:
+  html_document: default
+  pdf_document: default
 ---
 
 ```{r setup, include=FALSE}
@@ -202,9 +204,6 @@ characters
 ### Plot of Trump approval rona vs. non-rona
 
 covidapproval$State = covidapproval$ï..State 
-
-covidapproval <- covidapproval %>%
-  arrange(desc(TrumpCOVID))
 
 ggplot(data = covidapproval, aes(x = reorder(State, TrumpCOVID))) +
   geom_bar(stat = "identity", aes(y = TrumpCOVID), fill = "red", alpha = 0.2) +

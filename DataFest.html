@@ -580,9 +580,6 @@ characters</code></pre>
 
 covidapproval$State = covidapproval$ï..State 
 
-covidapproval &lt;- covidapproval %&gt;%
-  arrange(desc(TrumpCOVID))
-
 ggplot(data = covidapproval, aes(x = reorder(State, TrumpCOVID))) +
   geom_bar(stat = &quot;identity&quot;, aes(y = TrumpCOVID), fill = &quot;red&quot;, alpha = 0.2) +
   geom_point(stat = &quot;identity&quot;, aes(y = Trumpapprov), color = &quot;black&quot;) +
