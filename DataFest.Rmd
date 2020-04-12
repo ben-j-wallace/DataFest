@@ -198,12 +198,16 @@ characters <- html_text(html, ".iLEVuK:nth-child(9) .blyETw:nth-child(1) , .iLEV
 characters
 ```
 
-```{r}
-covidapproval <- covidapproval %>%
-  arrange(desc(TrumpCOVID))
+```{r} 
+### Plot of Trump approval rona vs. non-rona
 
 covidapproval$State = covidapproval$ï..State 
 
-ggplot(data = covidapproval, aes(x = State, y = TrumpCOVID)) +
-  geom_point() 
+covidapproval <- covidapproval %>%
+  arrange(desc(TrumpCOVID))
+
+ggplot(data = covidapproval, aes(x = reorder(State, TrumpCOVID))) +
+  geom_bar(stat = "identity", aes(y = TrumpCOVID), fill = "red", alpha = 0.2) +
+  geom_point(stat = "identity", aes(y = Trumpapprov), color = "black") +
+  theme(axis.text.x = element_text(angle = 90))
 ```
