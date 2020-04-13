@@ -206,6 +206,8 @@ characters
 ```{r} 
 ### Plot of Trump approval rona vs. non-rona
 
+covidapproval$State = covidapproval$ï..State
+
 ggplot(data = covidapproval, aes(x = reorder(State, TrumpCOVID))) +
   geom_bar(stat = "identity", aes(y = TrumpCOVID), fill = "red", color = "red", alpha = 0.2) +
   geom_point(stat = "identity", aes(y = Trumpapprov), color = "black") +
@@ -241,3 +243,35 @@ ggplot(data = topTenJails, mapping = aes(x = reorder(County, Percentage.Change),
   labs(x = "County", y = "Percent Decrease in Prisons", 
        title = "Top Ten Drops in Incarceration Rates in County Jails") 
 ```
+
+```{r}
+ggplot(data = jails, aes(x = Percentage.Change)) +
+  geom_histogram()
+
+ggplot(data = jails, aes(x = County.Profile)) +
+  geom_histogram(binwidth = .025)
+
+ggplot(data = jails, aes(x = State.Profile)) +
+geom_histogram(binwidth = 5)
+
+jails$Jurisdiction.Profile = jails$Jurisdiction.Profile..R.B.M.
+
+ggplot(data = jails, aes(x = Jurisdiction.Profile)) +
+  geom_bar()
+
+ggplot(data = jails, aes(x = Jail.Incarceration.Rate.Per.100K)) +
+geom_histogram()
+
+ggplot(data = jails, aes(x = COVID.19.Cases)) +
+  geom_histogram()
+
+jails %>%
+  summarise(mean = mean(COVID.19.Cases), ## Also log transform this?
+            median = median(COVID.19.Cases)
+  )
+
+ggplot(data = jails, aes(x = log(Deaths.Per.100K.Residents))) + ### Log transform variable?
+  geom_histogram()
+
+```
+
