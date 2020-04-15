@@ -22,6 +22,7 @@ library(sf)
 library(tidycensus)
 library(leaflet)
 library(mapview)
+library(broom)
 ```
 
 ```{r read files, results = "hide"}
@@ -197,29 +198,9 @@ civiqs_poll <- "https://civiqs.com/results/approve_president_trump?annotations=t
 html <- read_html(civiqs_poll)
 
 characters <- html_text(html, ".iLEVuK:nth-child(9) .blyETw:nth-child(1) , .iLEVuK:nth-child(9) .kTXupV:nth-child(1) , .iLEVuK:nth-child(9) .eafFIQ")
-
-characters
 ```
 
-# Trump approval Ratings
 
-```{r} 
-### Plot of Trump approval rona vs. non-rona
-
-covidapproval$State = covidapproval$ï..State
-
-ggplot(data = covidapproval, aes(x = reorder(State, TrumpCOVID))) +
-  geom_bar(stat = "identity", aes(y = TrumpCOVID), fill = "red", color = "red", alpha = 0.2) +
-  geom_point(stat = "identity", aes(y = Trumpapprov), color = "black") +
-  theme(axis.text.x = element_text(angle = 90)) +
-  labs(x = "State",
-       y = "Percent Approval",
-       title = "Trump 'Rona and non-'Rona Approval") +
-  theme(axis.text.x = element_text(angle = 90)) + 
-  labs(title = "Trump Approval Ratings vs. Without", x = "State",
-       y = "Approval Rating") + 
-  theme(legend.position="right")
-```
 
 # Jail Data
 
@@ -244,7 +225,7 @@ ggplot(data = topTenJails, mapping = aes(x = reorder(County, Percentage.Change),
        title = "Top Ten Drops in Incarceration Rates in County Jails") 
 ```
 
-```{r}
+```{r bunch_of_graphs}
 ggplot(data = jails, aes(x = Percentage.Change)) +
   geom_histogram()
 
@@ -275,3 +256,59 @@ ggplot(data = jails, aes(x = log(Deaths.Per.100K.Residents))) + ### Log transfor
 
 ```
 
+```{r model fitting}
+lm_full <- lm(Percentage.Change ~ County.Profile + State.Profile + Jurisdiction.Profile, data = jails)
+
+lm <- step(lm_full, direction = "backward", trace=FALSE) 
+
+tidy(lm) %>%
+  select(term, estimate, p.value)
+
+```
+
+```{r diagnostic_plots}
+plot_diagnostic <- function(x, data) {
+  
+  plot_variance <- augment(x) %>%
+    ggplot(aes(x = .fitted, y = .resid)) +
+    geom_point() + 
+    geom_hline(yintercept = 0, color = "blue", lty = 2) +
+    labs(x = expression(hat(y)), y = "Residual Value", 
+         title = "Variance Plot") 
+  
+  plot_normality <- augment(x) %>%
+    ggplot(aes(x = .resid)) +
+    geom_histogram(binwidth = .01, alpha = .5, color = "orange") + 
+    labs(x = "Residual Value", y = "Count", title = "Normality Plot") 
+  
+  plot_independence <- augment(x) %>%
+    ggplot(aes(x = 1:nrow(data), y = .resid)) + 
+    geom_point() + 
+    labs(x = "Index", y = "Residual Value", title = "Independence Plot") 
+  
+  plot_variance / (plot_normality + plot_independence)
+}
+
+plot_diagnostic(lm, jails)
+```
+
+# Trump approval Ratings
+
+```{r} 
+
+### Plot of Trump approval rona vs. non-rona
+
+#covidapproval$State = covidapproval$ï..State
+
+#ggplot(data = covidapproval, aes(x = reorder(State, TrumpCOVID))) +
+#  geom_bar(stat = "identity", aes(y = TrumpCOVID), fill = "red", color = "red", alpha = 0.2) +
+#  geom_point(stat = "identity", aes(y = Trumpapprov), color = "black") +
+#  theme(axis.text.x = element_text(angle = 90)) +
+#  labs(x = "State",
+#       y = "Percent Approval",
+#       title = "Trump 'Rona and non-'Rona Approval") +
+#  theme(axis.text.x = element_text(angle = 90)) + 
+#  labs(title = "Trump Approval Ratings vs. Without", x = "State",
+#       y = "Approval Rating") + 
+#  theme(legend.position="right")
+```
