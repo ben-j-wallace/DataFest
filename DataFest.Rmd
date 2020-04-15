@@ -20,9 +20,16 @@ library(lubridate)
 library(rvest)
 library(sf)
 library(tidycensus)
-library(leaflet)
 library(mapview)
+<<<<<<< HEAD
 library(broom)
+=======
+library(tidyverse)       # Tidyverse for Tidy Data
+library(readxl)
+library(tigris)
+library(sf)
+library(viridis)
+>>>>>>> 7f7764b88a99b2d6033da8e62ce093e51fcff086
 ```
 
 ```{r read files, results = "hide"}
@@ -199,8 +206,6 @@ html <- read_html(civiqs_poll)
 
 characters <- html_text(html, ".iLEVuK:nth-child(9) .blyETw:nth-child(1) , .iLEVuK:nth-child(9) .kTXupV:nth-child(1) , .iLEVuK:nth-child(9) .eafFIQ")
 ```
-
-
 
 # Jail Data
 
