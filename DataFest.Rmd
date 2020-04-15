@@ -20,8 +20,12 @@ library(lubridate)
 library(rvest)
 library(sf)
 library(tidycensus)
-library(leaflet)
 library(mapview)
+library(tidyverse)       # Tidyverse for Tidy Data
+library(readxl)
+library(tigris)
+library(sf)
+library(viridis)
 ```
 
 ```{r read files, results = "hide"}
@@ -272,6 +276,10 @@ jails %>%
 
 ggplot(data = jails, aes(x = log(Deaths.Per.100K.Residents))) + ### Log transform variable?
   geom_histogram()
+
+```
+
+```{r}
 
 ```
 
