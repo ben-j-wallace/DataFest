@@ -55,13 +55,16 @@ toptenstates <- toptenstates[1:10,]
 # NY State and County Date
 
 ```{r plot}
-p1 <- ggplot(data = toptencounties, mapping = aes(x = reorder(county, cases), y = cases), fill=if_else(County=="New York")) +
+p1 <- ggplot(data = toptencounties, mapping = aes(x = reorder(county, cases), 
+                                                  y = cases), 
+             fill=if_else(County=="New York")) +
   geom_bar(stat = "identity") + 
   labs(title = "Top 10 Coronavirus counties cases", 
        y = "Cases", x = "County Name") + 
   coord_flip()
 
-p2 <- ggplot(data = toptenstates, mapping = aes(x = reorder(state, cases), y = cases)) +
+p2 <- ggplot(data = toptenstates, mapping = aes(x = reorder(state, cases), 
+                                                y = cases)) +
   geom_bar(stat = "identity") + 
   labs(title = "Top 10 Coronavirus states cases", 
        y = "Cases", x = "State Name") + 
@@ -164,15 +167,13 @@ lm_full <- lm(Percentage.Change ~ County.Profile + State.Profile +
 
 lm <- step(lm_full, direction = "backward", trace=FALSE) 
 
+tidy(lm) %>%
+  select(term, estimate, p.value)
+```
 #^Stepwise function uses similar strategy to adjusted R squared to find the best
 #fit model with constrinas in mind. Here, it finds that Jurisdiction.Profile is 
 #the most important relationship
-
-tidy(lm) %>%
-  select(term, estimate, p.value)
-
-#graph Jurisdiction.Profile vs. Percentage.Change:
-
+```{r graph Jurisdiction.Profile vs. Percentage.Change:}
 ggplot(data = jails, aes(x = Jurisdiction.Profile, y = Percentage.Change)) + 
   geom_point() + 
   geom_smooth(method = "lm", se = FALSE) + 
