@@ -27,6 +27,7 @@ library(readxl)
 library(tigris)
 library(sf)
 library(viridis)
+library(stringr)
 ```
 
 ```{r read files, results = "hide"}
@@ -35,7 +36,7 @@ states <- read.csv("datafiles/us-states.csv")
 measures <- read.csv("datafiles/statedata.csv")
 global_measures <- read.csv("datafiles/ACAPSGlobalResponse.csv")
 covidapproval <- read.csv("datafiles/Covidapproval_Population.csv")
-jails <- read.csv("datafiles/DataFest Covid in Jails - Sheet1.csv")
+jails <- read.csv("datafiles/Jails.csv")
 ```
 
 ```{r topten}
@@ -111,19 +112,36 @@ ggplot(first_measures, mapping = aes(x = reorder(COUNTRY, date), y = date)) +
 
 ```{r Overview of Data}
 jails %>%
-  summarise(n(), n_distinct(State)) 
+  summarise(n(), n_distinct(State_Abbrev)) 
 ```
 
 We have data from 334 counties from 27 states.
 
+```{r Race}
+# P005003 = White 
+# P005004 = Black
+# P005004 = Hispanic
+# P005005 = AmInd/AK
+# P005006 = Asian
+# P001001 = Population Total
+
+black <- c("P005004")
+
+blackgeo <- get_decennial(geography = "county", variables = black, year = 2010, summary_var = "P001001", geometry = TRUE) %>%
+  mutate(pct = 100 * (value / summary_value))
+                         
+jails$CountyState = as.character(jails$CountyState)
+blackgeo$NAME = str_replace(blackgeo$NAME, "County,", "")
+```
+
 ```{r}
 topTenJails <- jails %>%
-  arrange(Percentage.Change) %>%
-  select(State, County, Percentage.Change) %>%
+  arrange(Percent_Change) %>%
+  select(State, County, Percent_Change) %>%
   slice(1:10)
 
-ggplot(data = topTenJails, mapping = aes(x = reorder(County, Percentage.Change), 
-                                         y = abs(Percentage.Change) * 100)) + 
+ggplot(data = topTenJails, mapping = aes(x = reorder(County, Percent_Change), 
+                                         y = abs(Percent_Change) * 100)) + 
   geom_bar(stat = "identity") +
   coord_flip() + 
   labs(x = "County", y = "Percent Decrease in Prisons", 
@@ -131,39 +149,37 @@ ggplot(data = topTenJails, mapping = aes(x = reorder(County, Percentage.Change),
 ```
 
 ```{r bunch_of_graphs}
-ggplot(data = jails, aes(x = Percentage.Change)) +
+ggplot(data = jails, aes(x = Percent_Change)) +
   geom_histogram()
 
-ggplot(data = jails, aes(x = County.Profile)) +
+ggplot(data = jails, aes(x = County_Profile)) +
   geom_histogram(binwidth = .025)
 
-ggplot(data = jails, aes(x = State.Profile)) +
+ggplot(data = jails, aes(x = State_Profile)) +
 geom_histogram(binwidth = 5)
 
-jails$Jurisdiction.Profile = jails$Jurisdiction.Profile..R.B.M.
-
-ggplot(data = jails, aes(x = Jurisdiction.Profile)) +
+ggplot(data = jails, aes(x = Jurisdiction_Profile)) +
   geom_bar()
 
-ggplot(data = jails, aes(x = Jail.Incarceration.Rate.Per.100K)) +
+ggplot(data = jails, aes(x = Incarceration_Per_100K)) +
 geom_histogram()
 
-ggplot(data = jails, aes(x = COVID.19.Cases)) +
+ggplot(data = jails, aes(x = COVID.19_Cases)) +
   geom_histogram()
 
 jails %>%
-  summarise(mean = mean(COVID.19.Cases), ## Also log transform this?
-            median = median(COVID.19.Cases)
+  summarise(mean = mean(COVID.19_Cases), ## Also log transform this?
+            median = median(COVID.19_Cases)
   )
 
-ggplot(data = jails, aes(x = log(Deaths.Per.100K.Residents))) + ### Log transform variable?
+ggplot(data = jails, aes(x = log(Deaths_Per_100K_Residents))) + ### Log transform variable?
   geom_histogram()
 
 ```
 
 ```{r Step-wise Strategy for Model Fitting}
-lm_full <- lm(Percentage.Change ~ County.Profile + State.Profile + 
-                Jurisdiction.Profile, data = jails)
+lm_full <- lm(Percent_Change ~ County_Profile + State_Profile + 
+                Jurisdiction_Profile, data = jails)
 
 lm <- step(lm_full, direction = "backward", trace=FALSE) 
 
@@ -171,10 +187,10 @@ tidy(lm) %>%
   select(term, estimate, p.value)
 ```
 #^Stepwise function uses similar strategy to adjusted R squared to find the best
-#fit model with constrinas in mind. Here, it finds that Jurisdiction.Profile is 
+#fit model with constrinas in mind. Here, it finds that Jurisdiction_Profile is 
 #the most important relationship
-```{r graph Jurisdiction.Profile vs. Percentage.Change:}
-ggplot(data = jails, aes(x = Jurisdiction.Profile, y = Percentage.Change)) + 
+```{r graph Jurisdiction_Profile vs. Percent_Change:}
+ggplot(data = jails, aes(x = Jurisdiction_Profile, y = Percent_Change)) + 
   geom_point() + 
   geom_smooth(method = "lm", se = FALSE) + 
   theme_minimal()
@@ -221,13 +237,79 @@ Condition 3: We must verify the normality of residuals. The residual histogram
 displays a normal distribution of residual values, so we have verified the 
 normality of residuals.
 
-```{r Lets try county.profile now}
-lm(Percentage.Change ~ County.Profile, data = jails) %>%
-  tidy()
+```{r Lets try County_Profile now}
+model <- lm(Percent_Change ~ County_Profile + State_Profile + Jurisdiction_Profile + Cases_Per_100K_Residents + COVID.19_Deaths, data = jails)
 
-ggplot(data = jails, aes(x = County.Profile, y = log(abs(Percentage.Change)))) + 
+tidy(model)
+
+ggplot(data = jails, aes(x = County_Profile, y = log(abs(Percent_Change)))) + 
   geom_point() + 
   geom_smooth(method = "lm", se = FALSE) + 
   theme_minimal()
 ```
 Doesn't seem very legit either...
+
+```{r augmentmodel}
+model_aug <- augment(model) %>%
+  mutate(obs_num = row_number())
+```
+
+```{r leverage}
+leverage_threshold <- 2*(5 + 1)/nrow(model_aug)
+
+high_leverage <- model_aug %>%
+  mutate(high_lev = .hat > leverage_threshold) %>%
+  select(high_lev, obs_num)
+```
+
+```{r std.residuals}
+ggplot(data = model_aug, aes(x = obs_num, y = .std.resid)) +
+  geom_point()
+
+model_aug %>%
+  summarise(min = min(.std.resid),
+            max = max(.std.resid),
+            mean = mean(.std.resid),
+            median = median(.std.resid))
+
+high_sdresid <- model_aug %>%
+  mutate(high_sd = abs(.std.resid) > 2) %>%
+  select(obs_num, high_sd)
+```
+
+```{r cooksdistance}
+ggplot(data = model_aug, aes(x = obs_num, y = .cooksd)) + 
+  geom_point(alpha = 0.5) +
+  geom_hline(yintercept = 1, color = "red")
+
+high_cookdist <- model_aug %>%
+  mutate(high_cook = .cooksd > 1) %>%
+  select(obs_num, high_cook)
+```
+
+```{r unusual observations}
+unusual <- bind_cols(high_leverage, high_sdresid, high_cookdist)
+
+unusual <- unusual %>%
+  select(high_lev, high_sd, high_cook)
+```
+
+Obs 245 has a high cook distance and is a leverage point, so we should consider removing it from the model. 
+
+Also look into the cases with high std. residuals to see if they should be removed.
+
+```{r}
+jails <- jails %>%
+  mutate(obs_num =  1:n()) %>%
+  filter(obs_num != 245)
+```
+
+```{r}
+model2 <- lm(Percent_Change ~ County_Profile + State_Profile + Jurisdiction_Profile + Cases_Per_100K_Residents + COVID.19_Deaths, data = jails)
+
+model2_aug <- augment(model2)
+
+tidy(model2)
+
+
+```
