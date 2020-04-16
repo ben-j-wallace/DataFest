@@ -21,15 +21,12 @@ library(rvest)
 library(sf)
 library(tidycensus)
 library(mapview)
-<<<<<<< HEAD
 library(broom)
-=======
 library(tidyverse)       # Tidyverse for Tidy Data
 library(readxl)
 library(tigris)
 library(sf)
 library(viridis)
->>>>>>> 7f7764b88a99b2d6033da8e62ce093e51fcff086
 ```
 
 ```{r read files, results = "hide"}
@@ -73,97 +70,6 @@ p2 <- ggplot(data = toptenstates, mapping = aes(x = reorder(state, cases), y = c
 p1 + p2
 ```
 
-# State First Stay at Home
-
-```{r addmeasures} 
-### Removing United States from df
-
-measures <- measures[-c(1),]
-
-dates <- c("4/4/2020 17:00", # Dates of stay at home orders
-           "3/28/2020 17:00",
-           "3/31/2020 17:00",
-           "",
-           "3/19/2020 0:00",
-           "3/26/2020 6:00",
-           "3/23/2020 20:00",
-           "3/24/2020 8:00",
-           "4/1/2020 0:01",
-           "4/3/2020 0:01",
-           "4/3/2020 0:00",
-           "3/25/2020 0:01",
-           "3/25/2020 13:30",
-           "3/21/2020 17:00",
-           "3/24/2020 23:59",
-           "",
-           "3/30/2020 0:01",
-           "3/26/2020 20:00",
-           "3/23/2020 17:00",
-           "4/2/2020 0:01",
-           "3/30/2020 20:00",
-           "3/23/2020 12:00",
-           "3/24/2020 0:01",
-           "3/27/2020 23:59",
-           "4/3/2020 17:00",
-           "4/6/2020 0:01",
-           "3/28/2020 0:01",
-           "",
-           "4/1/2020 0:00",
-           "3/27/2020 23:59",
-           "3/21/2020 21:00",
-           "3/24/2020 8:00",
-           "3/22/2020 20:00",
-           "3/30/2020 15:00",
-           "",
-           "3/23/2020 23:59",
-           "",
-           "3/23/2020 0:00",
-           "4/1/2020 20:00",
-           "3/28/2020 0:00",
-           "4/7/2020 17:00",
-           "",
-           "3/31/2020 23:59",
-           "4/2/2020 0:01",
-           "",
-           "3/25/2020 17:00",
-           "3/30/2020 0:00",
-           "3/23/2020 0:00",
-           "3/24/2020 20:00",
-           "3/25/2020 8:00",
-           ""
-           )
-
-### Adding data to measures df
-measures <- measures %>%
-  mutate(date.stay.at.home = dates)  %>%
-  mutate(stateno = c(1:51))
-
-```
-
-```{r plotstayathome}
-### Plot of stay at home dates
-
-measures$date.stay.at.home = as.Date(measures$date.stay.at.home, "%m/%d/%y")
-med <- median(measures$date.stay.at.home, na.rm = TRUE)
-avg <- mean(measures$date.stay.at.home, na.rm = TRUE)
-
-ggplot(data = measures, aes(x = date.stay.at.home)) +
-         geom_histogram(stat = "count") +
-   scale_x_date(breaks = "3 days") +
-  theme(axis.text.x = element_text(angle = 90)) + 
-  geom_vline(xintercept = med, color = "darkred") +
-  geom_vline(xintercept = avg, color = "navy")
-
-```
-
-# Twitter
-
-TwitteR:
-
-https://opensource.com/article/17/6/collecting-and-mapping-twitter-data-using-r
-
-**I'm still applying for a Twitter dev account in order to access the Twitter API**
-
 # Global Measures
 
 ```{r countries_most_social_distancing}
@@ -196,15 +102,6 @@ ggplot(first_measures, mapping = aes(x = reorder(COUNTRY, date), y = date)) +
   labs(y = "1st Social Distancing Measure Date", x = "Country",
        title = "1st Social Distancing Implemented") + 
   theme_minimal(base_size = 14)
-```
-
-# RVest
-
-```{r Webscraping}
-civiqs_poll <- "https://civiqs.com/results/approve_president_trump?annotations=true&uncertainty=true&zoomIn=true"
-html <- read_html(civiqs_poll)
-
-characters <- html_text(html, ".iLEVuK:nth-child(9) .blyETw:nth-child(1) , .iLEVuK:nth-child(9) .kTXupV:nth-child(1) , .iLEVuK:nth-child(9) .eafFIQ")
 ```
 
 # Jail Data
@@ -261,25 +158,38 @@ ggplot(data = jails, aes(x = log(Deaths.Per.100K.Residents))) + ### Log transfor
 
 ```
 
-```{r model fitting}
-lm_full <- lm(Percentage.Change ~ County.Profile + State.Profile + Jurisdiction.Profile, data = jails)
+```{r Step-wise Strategy for Model Fitting}
+lm_full <- lm(Percentage.Change ~ County.Profile + State.Profile + 
+                Jurisdiction.Profile, data = jails)
 
 lm <- step(lm_full, direction = "backward", trace=FALSE) 
+
+#^Stepwise function uses similar strategy to adjusted R squared to find the best
+#fit model with constrinas in mind. Here, it finds that Jurisdiction.Profile is 
+#the most important relationship
 
 tidy(lm) %>%
   select(term, estimate, p.value)
 
+#graph Jurisdiction.Profile vs. Percentage.Change:
+
+ggplot(data = jails, aes(x = Jurisdiction.Profile, y = Percentage.Change)) + 
+  geom_point() + 
+  geom_smooth(method = "lm", se = FALSE) + 
+  theme_minimal()
 ```
+
+This graph doesn't look very legit...
 
 ```{r diagnostic_plots}
 plot_diagnostic <- function(x, data) {
   
-  plot_variance <- augment(x) %>%
+  plot_residuals <- augment(x) %>%
     ggplot(aes(x = .fitted, y = .resid)) +
     geom_point() + 
     geom_hline(yintercept = 0, color = "blue", lty = 2) +
     labs(x = expression(hat(y)), y = "Residual Value", 
-         title = "Variance Plot") 
+         title = "Residuals Plot") 
   
   plot_normality <- augment(x) %>%
     ggplot(aes(x = .resid)) +
@@ -291,29 +201,32 @@ plot_diagnostic <- function(x, data) {
     geom_point() + 
     labs(x = "Index", y = "Residual Value", title = "Independence Plot") 
   
-  plot_variance / (plot_normality + plot_independence)
+  plot_residuals / (plot_normality + plot_independence)
 }
 
 plot_diagnostic(lm, jails)
 ```
+Conditions of Linearity:
 
-# Trump approval Ratings
+Condition 1: We must verify that observations are independent. In this case, 
+there doesn’t seem to be a pattern in the residual scatter plot, so the 
+observations are independent.
 
-```{r} 
+Conditions 2 & 4: We must verify that the distribution of residuals is around 0 
+and has constant variance. The variance plot shows that the distribution of 
+residuals is centered around 0 and has constant variance throughout.
 
-### Plot of Trump approval rona vs. non-rona
+Condition 3: We must verify the normality of residuals. The residual histogram 
+displays a normal distribution of residual values, so we have verified the 
+normality of residuals.
 
-#covidapproval$State = covidapproval$ï..State
+```{r Lets try county.profile now}
+lm(Percentage.Change ~ County.Profile, data = jails) %>%
+  tidy()
 
-#ggplot(data = covidapproval, aes(x = reorder(State, TrumpCOVID))) +
-#  geom_bar(stat = "identity", aes(y = TrumpCOVID), fill = "red", color = "red", alpha = 0.2) +
-#  geom_point(stat = "identity", aes(y = Trumpapprov), color = "black") +
-#  theme(axis.text.x = element_text(angle = 90)) +
-#  labs(x = "State",
-#       y = "Percent Approval",
-#       title = "Trump 'Rona and non-'Rona Approval") +
-#  theme(axis.text.x = element_text(angle = 90)) + 
-#  labs(title = "Trump Approval Ratings vs. Without", x = "State",
-#       y = "Approval Rating") + 
-#  theme(legend.position="right")
+ggplot(data = jails, aes(x = County.Profile, y = log(abs(Percentage.Change)))) + 
+  geom_point() + 
+  geom_smooth(method = "lm", se = FALSE) + 
+  theme_minimal()
 ```
+Doesn't seem very legit either...
