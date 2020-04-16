@@ -21,15 +21,12 @@ library(rvest)
 library(sf)
 library(tidycensus)
 library(mapview)
-<<<<<<< HEAD
 library(broom)
-=======
 library(tidyverse)       # Tidyverse for Tidy Data
 library(readxl)
 library(tigris)
 library(sf)
 library(viridis)
->>>>>>> 7f7764b88a99b2d6033da8e62ce093e51fcff086
 ```
 
 ```{r read files, results = "hide"}
@@ -317,3 +314,4 @@ plot_diagnostic(lm, jails)
 #       y = "Approval Rating") + 
 #  theme(legend.position="right")
 ```
+
