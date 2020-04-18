@@ -36,7 +36,7 @@ states <- read.csv("datafiles/us-states.csv")
 measures <- read.csv("datafiles/statedata.csv")
 global_measures <- read.csv("datafiles/ACAPSGlobalResponse.csv")
 covidapproval <- read.csv("datafiles/Covidapproval_Population.csv")
-jails <- read.csv("datafiles/Jails.csv")
+jails <- read.csv("datafiles/Jails.finalstates.csv")
 ```
 
 ```{r topten}
@@ -131,7 +131,19 @@ blackgeo <- get_decennial(geography = "county", variables = black, year = 2010, 
   mutate(pct = 100 * (value / summary_value))
                          
 jails$CountyState = as.character(jails$CountyState)
-blackgeo$NAME = str_replace(blackgeo$NAME, "County,", "")
+blackgeo$NAME = str_replace(blackgeo$NAME, " County", "")
+blackgeo$NAME = str_replace(blackgeo$NAME, " Parish", "")
+
+jails <- left_join(jails, blackgeo, by = c("CountyState" = "NAME"))
+
+jails <- jails %>%
+  drop_na(geometry)
+
+ # ggplot(data = jails, aes(fill = pct, color = geometry)) +
+#  geom_sf() +
+ # coord_sf(crs = 5070, datum = NA) +
+  #scale_fill_viridis(direction = -1, label = scales::dollar) + 
+  #scale_color_viridis(direction = -1, label = scales::dollar) +
 ```
 
 ```{r}
@@ -305,11 +317,22 @@ jails <- jails %>%
 ```
 
 ```{r}
-model2 <- lm(Percent_Change ~ County_Profile + State_Profile + Jurisdiction_Profile + Cases_Per_100K_Residents + COVID.19_Deaths, data = jails)
-
-model2_aug <- augment(model2)
+model2 <- lm(Percent_Change ~ County_Profile + State_Profile + Jurisdiction_Profile + COVID.19_Cases + pct, data = jails)
 
 tidy(model2)
 
+model2_aug <- augment(model2)
 
+model2_aug <- model2_aug%>%
+  mutate(obs_num = c(1:n()))
 ```
+
+```{r}
+summary(model2)
+```
+
+```{r}
+ggplot(data = model2_aug, aes(x = obs_num, y = .resid)) +
+  geom_point()
+```
+
