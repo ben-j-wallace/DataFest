@@ -134,18 +134,44 @@ jails$CountyState = as.character(jails$CountyState)
 blackgeo$NAME = str_replace(blackgeo$NAME, "County,", "")
 ```
 
-```{r}
+```{r top-ten-drops}
+jails <- jails %>%
+  mutate(percent_match_itnlnorm = 1 - (Target_Jail_Population / PreCovid_Jail_Pop))
+
+theme_set(theme_bw())
+
 topTenJails <- jails %>%
   arrange(Percent_Change) %>%
-  select(State, County, Percent_Change) %>%
+  mutate(percent_match_itnlnorm = percent_match_itnlnorm * 100) %>%
+  mutate(Percent_Change = abs(Percent_Change) * 100) %>%
+  select(CountyState, Percent_Change, percent_match_itnlnorm) %>%
   slice(1:10)
 
-ggplot(data = topTenJails, mapping = aes(x = reorder(County, Percent_Change), 
-                                         y = abs(Percent_Change) * 100)) + 
-  geom_bar(stat = "identity") +
+topTenJails <- topTenJails %>%
+  gather("Stat", "Value", -CountyState)
+
+Int_Plot<- ggplot(topTenJails, aes(x = CountyState, y = Value, fill = Stat)) +
+  geom_col(position = "dodge") + 
   coord_flip() + 
-  labs(x = "County", y = "Percent Decrease in Prisons", 
-       title = "Top Ten Drops in Incarceration Rates in County Jails") 
+  labs(x = "County", y = "Percent Decrease (%)",
+  title = "None of the Top Ten COVID Decreases in Jail Population Meet 
+International Norms") + 
+  scale_color_manual(name = "Key",
+    values = c("Percent_Change" = "yellow",
+               "percent_match_intlnorm" = "blue"),
+    labels = c("Percent_Change" = "Percent Change Post-Covid",
+               "percent_match_intlnorm" = "Percent Change for Intl Norm"))
+
+ Int_Plot
+```
+
+
+  
+```{r Summarise Plot}
+sum_jail <- jails %>%
+  summarise(sum(PreCovid_Jail_Pop), sum(Jail_Population_Latest))
+sum_jail
+# how to plot using ggplot?
 ```
 
 ```{r bunch_of_graphs}
