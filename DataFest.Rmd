@@ -28,6 +28,7 @@ library(tigris)
 library(sf)
 library(viridis)
 library(stringr)
+library(maps)
 ```
 
 ```{r read files, results = "hide"}
@@ -129,6 +130,8 @@ black <- c("P005004")
 
 blackgeo <- get_decennial(geography = "county", variables = black, year = 2010, summary_var = "P001001", geometry = TRUE) %>%
   mutate(pct = 100 * (value / summary_value))
+
+stategeo <- st_as_sf(map("state", plot = FALSE, fill = TRUE))
                          
 jails$CountyState = as.character(jails$CountyState)
 blackgeo$NAME = str_replace(blackgeo$NAME, " County", "")
@@ -137,13 +140,26 @@ blackgeo$NAME = str_replace(blackgeo$NAME, " Parish", "")
 jails <- left_join(jails, blackgeo, by = c("CountyState" = "NAME"))
 
 jails <- jails %>%
-  drop_na(geometry)
+  drop_na()
 
- # ggplot(data = jails, aes(fill = pct, color = geometry)) +
-#  geom_sf() +
- # coord_sf(crs = 5070, datum = NA) +
-  #scale_fill_viridis(direction = -1, label = scales::dollar) + 
-  #scale_color_viridis(direction = -1, label = scales::dollar) +
+jails$geom = jails$geometry
+
+ggplot() +
+  geom_sf(aes(geometry = geom, fill = pct , color = pct), data = jails) +
+  labs(title = "Percent Black by County",
+       fill = "Percent Black",
+       color = "Percent Black") + 
+  scale_fill_viridis(option = "viridis") + 
+  scale_color_viridis(option = "viridis") +
+  geom_sf(data = stategeo, fill = NA) +
+  theme(panel.background = element_rect(fill = "white")) 
+
+```
+
+```{r}
+### Mapping Jurisdictions
+
+
 ```
 
 ```{r}
