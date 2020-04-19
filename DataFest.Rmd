@@ -129,14 +129,15 @@ We have data from 334 counties from 27 states.
 black <- c("P005004")
 
 blackgeo <- get_decennial(geography = "county", variables = black, year = 2010, summary_var = "P001001", geometry = TRUE) %>%
-  mutate(pct = 100 * (value / summary_value))
+  mutate(pctblack = 100 * (value / summary_value))
 
-stategeo <- st_as_sf(map("state", plot = FALSE, fill = TRUE))
-                         
 jails$CountyState = as.character(jails$CountyState)
 blackgeo$NAME = str_replace(blackgeo$NAME, " County", "")
 blackgeo$NAME = str_replace(blackgeo$NAME, " Parish", "")
 
+
+stategeo <- st_as_sf(map("state", plot = FALSE, fill = TRUE))
+                        
 jails <- left_join(jails, blackgeo, by = c("CountyState" = "NAME"))
 
 jails <- jails %>%
@@ -145,7 +146,7 @@ jails <- jails %>%
 jails$geom = jails$geometry
 
 ggplot() +
-  geom_sf(aes(geometry = geom, fill = pct , color = pct), data = jails) +
+  geom_sf(aes(geometry = geom, fill = pctblack, color = pctblack), data = jails) +
   labs(title = "Percent Black by County",
        fill = "Percent Black",
        color = "Percent Black") + 
@@ -159,7 +160,6 @@ ggplot() +
 ```{r}
 ### Mapping Jurisdictions
 
-
 jails$Jurisdiction_Profile = recode_factor(jails$Jurisdiction_Profile, "R" = "Conservative", "M" = "Moderate", "B" = "Liberal")
 
 ggplot(data = jails, aes(x = Jurisdiction_Profile)) +
@@ -170,6 +170,15 @@ ggplot(data = jails, aes(x = Jurisdiction_Profile)) +
        title = "Judicial Profile") +
   theme(legend.position = "none") +
   theme(panel.background = element_rect(fill = "white"))
+
+ggplot() +
+  geom_sf(aes(geometry = geom, fill = Jurisdiction_Profile), data = jails) +
+  labs(title = "Jurisdiction Profile",
+       fill = "Jurisdiction Profile") + 
+  geom_sf(data = stategeo, fill = NA) +
+  scale_fill_manual(values = c("darkred", "forestgreen", "blue2")) +
+  theme(panel.background = element_rect(fill = "white")) 
+
   
 ```
 
@@ -217,7 +226,7 @@ ggplot(data = jails, aes(x = log(Deaths_Per_100K_Residents))) + ### Log transfor
 ```
 
 ```{r Step-wise Strategy for Model Fitting}
-lm_full <- lm(Percent_Change ~ County_Profile + State_Profile + 
+lm_full <- lm(Percent_Change ~ County_Profile + State_Profile +
                 Jurisdiction_Profile, data = jails)
 
 lm <- step(lm_full, direction = "backward", trace=FALSE) 
@@ -344,7 +353,7 @@ jails <- jails %>%
 ```
 
 ```{r}
-model2 <- lm(Percent_Change ~ County_Profile + State_Profile + Jurisdiction_Profile + COVID.19_Cases + pct, data = jails)
+model2 <- lm(Percent_Change ~ County_Profile + State_Profile + Jurisdiction_Profile + COVID.19_Cases + pctblack + pctblack*Jurisdiction_Profile, data = jails)
 
 tidy(model2)
 
@@ -352,14 +361,25 @@ model2_aug <- augment(model2)
 
 model2_aug <- model2_aug%>%
   mutate(obs_num = c(1:n()))
+
+step_model2 <- step(model2, direction = "backward", trace=FALSE) 
+
+step_model2
+
 ```
 
+step wise regression (*step function)
+
 ```{r}
-summary(model2)
+summary(step_model2)
 ```
 
 ```{r}
 ggplot(data = model2_aug, aes(x = obs_num, y = .resid)) +
   geom_point()
+```
+
+```{r}
+
 ```
 
