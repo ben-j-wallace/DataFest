@@ -160,6 +160,17 @@ ggplot() +
 ### Mapping Jurisdictions
 
 
+jails$Jurisdiction_Profile = recode_factor(jails$Jurisdiction_Profile, "R" = "Conservative", "M" = "Moderate", "B" = "Liberal")
+
+ggplot(data = jails, aes(x = Jurisdiction_Profile)) +
+  geom_bar(aes(fill = Jurisdiction_Profile), color = "black") +
+  scale_fill_manual(values = c("DarkRed", "ForestGreen", "Blue4")) +
+  labs(x = "Judicial Profile",
+       y = "Frequency",
+       title = "Judicial Profile") +
+  theme(legend.position = "none") +
+  theme(panel.background = element_rect(fill = "white"))
+  
 ```
 
 ```{r}
