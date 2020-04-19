@@ -28,6 +28,7 @@ library(tigris)
 library(sf)
 library(viridis)
 library(stringr)
+library(maps)
 ```
 
 ```{r read files, results = "hide"}
@@ -36,7 +37,7 @@ states <- read.csv("datafiles/us-states.csv")
 measures <- read.csv("datafiles/statedata.csv")
 global_measures <- read.csv("datafiles/ACAPSGlobalResponse.csv")
 covidapproval <- read.csv("datafiles/Covidapproval_Population.csv")
-jails <- read.csv("datafiles/Jails.csv")
+jails <- read.csv("datafiles/Jails.finalstates.csv")
 ```
 
 ```{r topten}
@@ -129,9 +130,47 @@ black <- c("P005004")
 
 blackgeo <- get_decennial(geography = "county", variables = black, year = 2010, summary_var = "P001001", geometry = TRUE) %>%
   mutate(pct = 100 * (value / summary_value))
+
+stategeo <- st_as_sf(map("state", plot = FALSE, fill = TRUE))
                          
 jails$CountyState = as.character(jails$CountyState)
-blackgeo$NAME = str_replace(blackgeo$NAME, "County,", "")
+blackgeo$NAME = str_replace(blackgeo$NAME, " County", "")
+blackgeo$NAME = str_replace(blackgeo$NAME, " Parish", "")
+
+jails <- left_join(jails, blackgeo, by = c("CountyState" = "NAME"))
+
+jails <- jails %>%
+  drop_na()
+
+jails$geom = jails$geometry
+
+ggplot() +
+  geom_sf(aes(geometry = geom, fill = pct , color = pct), data = jails) +
+  labs(title = "Percent Black by County",
+       fill = "Percent Black",
+       color = "Percent Black") + 
+  scale_fill_viridis(option = "viridis") + 
+  scale_color_viridis(option = "viridis") +
+  geom_sf(data = stategeo, fill = NA) +
+  theme(panel.background = element_rect(fill = "white")) 
+
+```
+
+```{r}
+### Mapping Jurisdictions
+
+
+jails$Jurisdiction_Profile = recode_factor(jails$Jurisdiction_Profile, "R" = "Conservative", "M" = "Moderate", "B" = "Liberal")
+
+ggplot(data = jails, aes(x = Jurisdiction_Profile)) +
+  geom_bar(aes(fill = Jurisdiction_Profile), color = "black") +
+  scale_fill_manual(values = c("DarkRed", "ForestGreen", "Blue4")) +
+  labs(x = "Judicial Profile",
+       y = "Frequency",
+       title = "Judicial Profile") +
+  theme(legend.position = "none") +
+  theme(panel.background = element_rect(fill = "white"))
+  
 ```
 
 ```{r top-ten-drops}
@@ -331,11 +370,22 @@ jails <- jails %>%
 ```
 
 ```{r}
-model2 <- lm(Percent_Change ~ County_Profile + State_Profile + Jurisdiction_Profile + Cases_Per_100K_Residents + COVID.19_Deaths, data = jails)
-
-model2_aug <- augment(model2)
+model2 <- lm(Percent_Change ~ County_Profile + State_Profile + Jurisdiction_Profile + COVID.19_Cases + pct, data = jails)
 
 tidy(model2)
 
+model2_aug <- augment(model2)
 
+model2_aug <- model2_aug%>%
+  mutate(obs_num = c(1:n()))
 ```
+
+```{r}
+summary(model2)
+```
+
+```{r}
+ggplot(data = model2_aug, aes(x = obs_num, y = .resid)) +
+  geom_point()
+```
+
