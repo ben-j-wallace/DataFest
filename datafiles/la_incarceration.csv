@@ -1,0 +1,64 @@
+county_name,total_pop,urbanicity,total_jail_pop,black_jail_pop,latinx_jail_pop,white_jail_pop,total_jail_pretrial,total_jail_from_prison,total_jail_from_other_jail,jail_rated_capacity,private_jail_flag
+Acadia Parish,62514,small/mid,77,43.49,1.05,42.1,5,5,0,82,0
+Allen Parish,25631,rural,843,339,2.28,393,30,6,0,688,0
+Ascension Parish,123028,small/mid,480,238,5,233,374,97,2,572,0
+Assumption Parish,22580,rural,64,43,2,18,40,21,4,80,0
+Avoyelles Parish,40871,rural,899,282,0.65,422,109,504,65,755,0
+Beauregard Parish,36847,rural,125,75,2,75,25,25,0,161,0
+Bienville Parish,13639,rural,47,34,2.76,13,30,0,0,53,0
+Bossier Parish,127058,small/mid,1461,735,31,711,490,969,4,1627,0
+Caddo Parish,246034,small/mid,1174,771,21.21,322,728,251,21,1750,0
+Calcasieu Parish,202330,small/mid,1273,675,35.53,591,845,328,949,1470,0
+Caldwell Parish,9947,rural,45,22,0.34,23,41,26,0,45,0
+Cameron Parish,6926,small/mid,30,3,4,27,26,4,0,32,0
+Catahoula Parish,9833,rural,792,469,21.59,325,647,240,220,862,1
+Claiborne Parish,16002,rural,599,323.42,52.73,168.71,95,10,44,655,0
+Concordia Parish,19849,rural,1108,642,9,419,221,409,642,1164,1
+De Soto Parish,27265,small/mid,118,82.87,1.1,34.03,86,0,0,116,0
+East Baton Rouge Parish,443607,small/mid,1637,1282,12,325,1276,351,0,1844,0
+East Carroll Parish,7133,rural,1118,466,0,692,477,47,4,1410,0
+East Feliciana Parish,19408,small/mid,150,108,1.75,50,58,0,0,167,0
+Evangeline Parish,33625,rural,98,79,12,22,63,11,1,116,0
+Franklin Parish,20261,rural,780,520,6,264,77,785,9,834,0
+Grant Parish,22322,small/mid,100,45,3.28,45,55,50,0,105,0
+Iberia Parish,72001,small/mid,415,242,8,162,270,145,270,512,0
+Iberville Parish,32920,small/mid,98,50,15,30,89,6,0,95,0
+Jackson Parish,15893,rural,1050,500,40,339,223,866,223,1252,0
+Jefferson Parish,436296,suburban,969,751,120.82,190,930,11,0,1085,0
+Jefferson Davis Parish,31491,rural,74,41,2.24,31,66,4,4,110,0
+Lafayette Parish,241534,small/mid,794,458,2,308,517,334,2,954,0
+Lafourche Parish,98202,small/mid,184,82,2.52,111,143,40,0,245,0
+La Salle Parish,14929,rural,16,4,0,11,8,5,0,29,0
+Lincoln Parish,47465,rural,230,133,3,95,65,156,0,241,0
+Livingston Parish,138038,small/mid,538,90,0.94,470,383,177,39,673,0
+Madison Parish,11343,rural,830,581,5,203,22,766,0,1202,1
+Morehouse Parish,25687,rural,200,120,2,80,133,69,16,264,0
+Natchitoches Parish,39038,rural,488,333,7,140,120,364,0,530,0
+Orleans Parish,391538,urban,1585,1064,4,185,1040,200,0,1938,0
+Ouachita Parish,155757,small/mid,2084,1171,17.57,848,607,284,57,2611,1
+Plaquemines Parish,23367,suburban,566,436,15,115,,,,,0
+Pointe Coupee Parish,22212,small/mid,150,130,5.51,26,48,108,48,209,0
+Rapides Parish,131282,small/mid,1152,686,7.77,417,332,702,19,1177,0
+Red River Parish,8519,rural,49,24,14,21,23,22,0,76,0
+Richland Parish,20415,rural,600,339,5,350,101,670,19,820,1
+Sabine Parish,24009,rural,134,56,1.12,93,83,67,5,163,0
+St. Bernard Parish,46108,suburban,220,121,12,106,236,0,0,266,0
+St. Charles Parish,52673,suburban,426,301,19.16,159,249,244,16,628,0
+St. Helena Parish,10385,small/mid,56,46,0,10,42,0,0,56,0
+St. James Parish,21324,suburban,74,53,3,15,51,8,1,124,0
+St. John the Baptist Parish,43339,suburban,205,165,4,38,122,85,4,312,0
+St. Landry Parish,83447,rural,282,204,4.52,108,299,15,237,305,0
+St. Martin Parish,54121,small/mid,175,83,2,99,161,161,0,187,0
+St. Mary Parish,50672,rural,297,180,9,131,232,27,54,398,0
+St. Tammany Parish,255820,suburban,1086,546.08,48.1,462.83,569,339,0,1227,0
+Tangipahoa Parish,132322,small/mid,558,309.48,23.42,216.98,212,469,5,553,0
+Terrebonne Parish,111691,small/mid,730,347,11,360,481,0,1,804,0
+Union Parish,22454,small/mid,360,199,6,188,114,279,0,388,0
+Vermilion Parish,59937,small/mid,142,60,2.65,73,96,39,96,150,0
+Vernon Parish,50519,rural,238,126,5,115,23,0,1,269,0
+Washington Parish,46609,rural,196,107,1,93,168,35,143,214,0
+Webster Parish,39274,small/mid,250,180,10,100,100,5,0,250,0
+West Baton Rouge Parish,26207,small/mid,227,140,13,71,166,58,0,333,0
+West Carroll Parish,10975,rural,24,16,1.13,10,12,14,12,26,0
+West Feliciana Parish,15377,small/mid,33,21,0,7,12,7,0,39,0
+Winn Parish,14335,rural,78,24,4.25,50,31,38,18,79,0

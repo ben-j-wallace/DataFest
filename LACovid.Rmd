@@ -1,0 +1,311 @@
+---
+title: "Jails"
+author: "Albert Sun and Ben Wallace"
+date: "4/19/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r upload packages, results = "hide"}
+library(dplyr)
+library(knitr)
+library(ggplot2)
+library(patchwork)
+library(twitteR)
+library(lubridate)
+library(rvest)
+library(sf)
+library(tidycensus)
+library(mapview)
+library(broom)
+library(tidyverse)       # Tidyverse for Tidy Data
+library(readxl)
+library(tigris)
+library(sf)
+library(viridis)
+library(stringr)
+library(maps)
+```
+
+```{r read files, results = "hide"}
+jails <- read.csv("datafiles/Jails.finalstates.csv")
+lajails <- read.csv("datafiles/la_incarceration.csv")
+```
+
+```{r Overview of Data}
+jails %>%
+  summarise(n(), n_distinct(State_Abbrev)) 
+```
+
+We have data from 334 counties from 27 states.
+
+# Data Wrangling
+
+```{r Filter to LA jails}
+jails <- jails %>%
+  filter(State == "Louisiana")
+```
+
+```{r Remove "parish" from name}
+lajails$county_name = str_replace(lajails$county_name, " Parish", "")
+```
+
+```{r join data}
+
+lajails$county_name = as.factor(lajails$county_name)
+
+jails <- left_join(jails, lajails, by = c("County" = "county_name"))
+```
+
+```{r recode private prison}
+jails$private_jail_flag = as.factor(jails$private_jail_flag)
+```
+
+```{r jail demographics}
+jails <- jails %>%
+  mutate(pctblackjail = (black_jail_pop)/(total_jail_pop) * 100) %>%
+  mutate(pctlatinxjail = (latinx_jail_pop)/(total_jail_pop) * 100) %>%
+  mutate(pctwhitejail = (white_jail_pop)/(total_jail_pop) * 100) %>%
+  mutate(pctpretrial = (total_jail_pretrial)/(total_jail_pop) * 100) %>%
+  mutate(pctprison = (total_jail_from_prison)/(total_jail_pop) * 100) %>%
+  mutate(pctjailfromother = (total_jail_from_other_jail)/(total_jail_pop) * 100)
+```
+
+#EDA 
+
+```{r state racial composition}
+
+blackpop <- c("P005004")
+
+blackgeo <- get_decennial(geography = "county", variables = blackpop, year = 2010, summary_var = "P001001", geometry = TRUE, state = "LA") %>%
+  mutate(pctblack = 100 * (value / summary_value))
+
+jails$CountyState = as.character(jails$CountyState)
+blackgeo$NAME = str_replace(blackgeo$NAME, " Parish", "")
+
+jails <- left_join(jails, blackgeo, by = c("CountyState" = "NAME"))
+
+stategeo <- st_as_sf(map("state", plot = FALSE, fill = TRUE, state = "LA")) %>%
+  filter(ID == "louisiana") 
+
+jails$geom = jails$geometry
+
+ggplot() +
+  geom_sf(aes(geometry = geom, fill = pctblack, color = pctblack), data = jails) +
+  labs(title = "Percent Black by Parish",
+       fill = "Percent Black",
+       color = "Percent Black",
+       caption = "Parishes excluded:") + 
+  scale_fill_viridis(option = "viridis") + 
+  scale_color_viridis(option = "viridis") +
+  geom_sf(data = stategeo, fill = NA) +
+  theme(panel.background = element_rect(fill = "white")) 
+```
+
+```{r Judicial profiles}
+### Mapping Jurisdictions
+
+jails$Jurisdiction_Profile = recode_factor(jails$Jurisdiction_Profile, "R" = "Conservative", "M" = "Moderate", "B" = "Liberal")
+
+ggplot() +
+  geom_sf(aes(geometry = geom, fill = Jurisdiction_Profile), data = jails) +
+  labs(title = "Jurisdiction Profile",
+       fill = "Jurisdiction Profile") + 
+  geom_sf(data = stategeo, fill = NA) +
+  scale_fill_manual(values = c("darkred", "forestgreen", "blue2")) +
+  theme(panel.background = element_rect(fill = "white")) 
+```
+
+```{r Percent change}
+ggplot() +
+  geom_sf(aes(geometry = geom, fill = Percent_Change, color = Percent_Change), data = jails) +
+  labs(title = "Percent Change by Parish",
+       fill = "Percent Change",
+       color = "Percent Change",
+       caption = "Parishes excluded:") + 
+  scale_fill_viridis(option = "viridis") + 
+  scale_color_viridis(option = "viridis") +
+  geom_sf(data = stategeo, fill = NA) +
+  theme(panel.background = element_rect(fill = "white")) 
+```
+
+```{r}
+ggplot() +
+  geom_sf(aes(geometry = geom, fill = pctblack, color = pctblack), data = jails) +
+  labs(title = "Percent of Prison Population Black",
+       fill = "Percent Black",
+       color = "Percent Black",
+       caption = "Parishes excluded:") + 
+  scale_fill_viridis(option = "viridis") + 
+  scale_color_viridis(option = "viridis") +
+  geom_sf(data = stategeo, fill = NA) +
+  theme(panel.background = element_rect(fill = "white"),
+        axis.text.y = element_blank(),
+        axis.text.x = element_blank(),
+        axis.ticks = element_blank()) 
+```
+
+
+```{r bunch_of_graphs}
+p1 <- ggplot(data = jails, aes(x = Percent_Change)) +
+  geom_histogram(binwidth = 0.05, fill = "skyblue", color = "black") +
+  labs(x = "Percent Change",
+       y = "Frequency",
+       title = "Percent Change")
+
+p2 <- ggplot(data = jails, aes(x = County_Profile)) +
+  geom_histogram(binwidth = .025, color = "black", fill = "honeydew") + 
+  labs(title = "County Profile",
+       x = "Percentage won by Trump (2016)",
+       y = "Frequency")
+
+p3 <- ggplot(data = jails, aes(x = Jurisdiction_Profile)) +
+  geom_bar(color = "black", fill = "tomato") +
+  labs(title = "Jurisdiction Profile",
+       x = "Jurisdiction Profile",
+       y = "Frequency")
+
+p4 <- ggplot(data = jails, aes(x = urbanicity)) +
+geom_bar(fill = "navy", color = "black") +
+  labs(title = "Population Density",
+       x = "Type",
+       y = "Frequency")
+
+p5 <- ggplot(data = jails, aes(x = COVID.19_Cases)) +
+  geom_histogram(fill = "white", color = "black", binwidth = 40) +
+  labs(title = "COVID.19 Cases",
+       x = "Number of Cases",
+       y = "Frequency")
+
+jails %>%
+  summarise(mean = mean(COVID.19_Cases), 
+            median = median(COVID.19_Cases))
+
+p6 <- ggplot(data = jails, aes(x = COVID.19_Deaths)) + 
+  geom_histogram(fill = "orange2", color = "black", binwidth = 10) +
+  labs(title = "COVID.19 Deaths",
+       x = "Number of Deaths",
+       y = "Frequency")
+
+jails %>%
+  summarise(mean = mean(COVID.19_Deaths),
+            median = median(COVID.19_Deaths))
+
+p7 <- ggplot(data = jails, aes(x = pctpretrial)) +
+  geom_histogram(binwidth = 17, color = "black", fill = "pink2") +
+  labs(x = "Percent Pretrial",
+       y = "Frequency") 
+
+p8 <- ggplot(data = jails, aes(x = pctprison)) +
+  geom_histogram(binwidth = 17, color = "black", fill = "red2") +
+  labs(x = "Percent Convicted",
+       y = "Frequency")
+
+p9 <- ggplot(data = jails, aes(x = pctjailfromother)) +
+  geom_histogram(binwidth = 17, color = "black", fill = "darkred") +
+  labs(x = "Percent from Other Jail",
+       y = "Frequency")
+
+p10 <- ggplot(data = jails, aes(x = pctblackjail)) + 
+  geom_histogram(binwidth = 7, fill = "lavender", color = "black") +
+  labs(x = "Percent of Prisoners Black",
+       y = "Frequency")
+
+p11 <- ggplot(data = jails, aes(x = pctwhitejail)) + 
+  geom_histogram(binwidth = 7, fill = "yellow2", color = "black") + 
+  labs(x = "Percent of Prisoners White",
+       y = "Frequency")
+
+p12 <- ggplot(data = jails, aes(x = pctlatinxjail)) +
+  geom_histogram(binwidth = 7, fill = "steelblue3", color = "black") +
+  labs(x = "Percent of Prisoners Latinx", 
+       y = "Frequency")
+
+```
+
+```{r}
+p1 | (p2 / p3)
+
+p4 | (p5 / p6)
+
+p7 | p8 | p9
+
+p10 | p11 | p12
+```
+
+
+# Univariate EDA
+
+```{r Reponse variable}
+jails <- jails %>%
+  mutate(ab_avg = Percent_Change < -.2)
+```
+
+
+```{r Step-wise Strategy for Model Fitting}
+model <- glm(ab_avg ~ County_Profile +
+                Jurisdiction_Profile + COVID.19_Cases + COVID.19_Deaths + urbanicity + private_jail_flag + pctblackjail + pctlatinxjail + pctwhitejail + pctpretrial + pctprison + pctjailfromother + jail_rated_capacity, data = jails)
+
+tidy(model)
+jails = na.omit(jails)
+
+model_aic <- step(model, direction = "backward", trace=FALSE) 
+
+tidy(model_aic) %>%
+  select(term, estimate, p.value)
+```
+
+```{r augmentmodel}
+model_aug <- augment(model_aic) %>%
+  mutate(obs_num = row_number())
+```
+
+```{r leverage}
+leverage_threshold <- 2*(8 + 1)/nrow(model_aug)
+
+high_leverage <- model_aug %>%
+  mutate(high_lev = .hat > leverage_threshold) %>%
+  select(high_lev, obs_num)
+
+high_leverage %>%
+  filter(high_lev == TRUE)
+```
+
+Jefferson has more cases and deaths than most parishes
+
+Morehouse county has a large reduction in prison population.
+
+```{r std.residuals}
+ggplot(data = model_aug, aes(x = obs_num, y = .std.resid)) +
+  geom_point()
+
+model_aug %>%
+  summarise(min = min(.std.resid),
+            max = max(.std.resid),
+            mean = mean(.std.resid),
+            median = median(.std.resid))
+
+high_sdresid <- model_aug %>%
+  mutate(high_sd = abs(.std.resid) > 2) %>%
+  select(obs_num, high_sd)
+
+high_sdresid %>%
+  filter(high_sd == TRUE)
+```
+
+```{r cooksdistance}
+ggplot(data = model_aug, aes(x = obs_num, y = .cooksd)) + 
+  geom_point(alpha = 0.5) +
+  geom_hline(yintercept = 1, color = "red")
+
+high_cookdist <- model_aug %>%
+  mutate(high_cook = .cooksd > 1) %>%
+  select(obs_num, high_cook)
+
+high_cookdist %>%
+  filter(high_cook == TRUE)
+```
+
