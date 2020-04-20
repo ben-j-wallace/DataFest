@@ -71,7 +71,8 @@ jails <- jails %>%
   mutate(pctwhitejail = (white_jail_pop)/(total_jail_pop) * 100) %>%
   mutate(pctpretrial = (total_jail_pretrial)/(total_jail_pop) * 100) %>%
   mutate(pctprison = (total_jail_from_prison)/(total_jail_pop) * 100) %>%
-  mutate(pctjailfromother = (total_jail_from_other_jail)/(total_jail_pop) * 100)
+  mutate(pctjailfromother = (total_jail_from_other_jail)/(total_jail_pop) * 100) %>%
+  mutate(pctcapacity = (jail_rated_capacity)/(total_jail_pop) * 100)
 ```
 
 # Top Ten Drops
@@ -176,6 +177,10 @@ stategeo <- st_as_sf(map("state", plot = FALSE, fill = TRUE, state = "LA")) %>%
 
 jails$geom = jails$geometry
 
+```
+
+```{r Percent black}
+
 ggplot() +
   geom_sf(aes(geometry = geom, fill = pctblack, color = pctblack), data = jails) +
   labs(title = "Percent Black by Parish",
@@ -185,7 +190,10 @@ ggplot() +
   scale_fill_viridis(option = "viridis") + 
   scale_color_viridis(option = "viridis") +
   geom_sf(data = stategeo, fill = NA) +
-  theme(panel.background = element_rect(fill = "white")) 
+  theme(panel.background = element_rect(fill = "white"),
+        axis.text.y = element_blank(),
+        axis.text.x = element_blank(),
+        axis.ticks = element_blank()) 
 ```
 
 ```{r Judicial profiles}
@@ -199,7 +207,10 @@ ggplot() +
        fill = "Jurisdiction Profile") + 
   geom_sf(data = stategeo, fill = NA) +
   scale_fill_manual(values = c("darkred", "forestgreen", "blue2")) +
-  theme(panel.background = element_rect(fill = "white")) 
+  theme(panel.background = element_rect(fill = "white"),
+        axis.text.y = element_blank(),
+        axis.text.x = element_blank(),
+        axis.ticks = element_blank()) 
 ```
 
 ```{r Percent change}
@@ -212,12 +223,15 @@ ggplot() +
   scale_fill_viridis(option = "viridis") + 
   scale_color_viridis(option = "viridis") +
   geom_sf(data = stategeo, fill = NA) +
-  theme(panel.background = element_rect(fill = "white")) 
+  theme(panel.background = element_rect(fill = "white"),
+        axis.text.y = element_blank(),
+        axis.text.x = element_blank(),
+        axis.ticks = element_blank()) 
 ```
 
-```{r}
+```{r }
 ggplot() +
-  geom_sf(aes(geometry = geom, fill = pctblack, color = pctblack), data = jails) +
+  geom_sf(aes(geometry = geom, fill = pctblackjail, color = pctblackjail), data = jails) +
   labs(title = "Percent of Prison Population Black",
        fill = "Percent Black",
        color = "Percent Black",
@@ -231,13 +245,20 @@ ggplot() +
         axis.ticks = element_blank()) 
 ```
 
+## Univariate EDA
 
-```{r bunch_of_graphs}
+```{r Reponse variable}
+jails <- jails %>%
+  mutate(ab_avg = Percent_Change < -.2)
+```
+
+```{r bunch_of_graphs, echo=FALSE}
 p1 <- ggplot(data = jails, aes(x = Percent_Change)) +
   geom_histogram(binwidth = 0.05, fill = "skyblue", color = "black") +
   labs(x = "Percent Change",
        y = "Frequency",
-       title = "Percent Change")
+       title = "Percent Change") +
+  geom_vline(xintercept = -.2, color = "darkred")
 
 p2 <- ggplot(data = jails, aes(x = County_Profile)) +
   geom_histogram(binwidth = .025, color = "black", fill = "honeydew") + 
@@ -307,10 +328,17 @@ p12 <- ggplot(data = jails, aes(x = pctlatinxjail)) +
   labs(x = "Percent of Prisoners Latinx", 
        y = "Frequency")
 
+p13 <- ggplot(data = jails, aes(x = ab_avg)) +
+  geom_bar(fill = "blue2", color = "black") +
+  labs(x = "Above Average Percent Decrease",
+       title = "Above Average Decrease (> 20%)",
+       y = "Frequency")
 ```
 
-```{r}
-p1 | (p2 / p3)
+```{r, echo=FALSE}
+p1 | p13 
+
+p2 | p3
 
 p4 | (p5 / p6)
 
@@ -319,18 +347,111 @@ p7 | p8 | p9
 p10 | p11 | p12
 ```
 
+# Bivariate EDA
 
-# Univariate EDA
+```{r bunch of graphs 2, echo=FALSE}
 
-```{r Reponse variable}
-jails <- jails %>%
-  mutate(ab_avg = Percent_Change < -.2)
+p14 <- ggplot(data = jails, aes(x = ab_avg, y = County_Profile)) +
+  geom_boxplot(fill = "honeydew", color = "black") +
+  labs(title = "Above Average Percent Decrease vs. County Profile",
+       x = "Above Average Decrease (>20%)",
+       y = "County Profile")
+
+p15 <- ggplot(data = jails, aes(x = ab_avg, fill = Jurisdiction_Profile)) +
+  geom_bar(color = "black", position = "dodge") +
+  labs(title = "Above Average vs. Jurisdiction Profile",
+      x = "Above Average Decrease (>20%)",
+      y = "Frequency")
+
+p16 <- ggplot(data = jails, aes(x = ab_avg, fill = urbanicity)) +
+  geom_bar(color = "black", position = "dodge") +
+  labs(title = "Above Average vs. Population Density",
+       x = "Above Average Decrease (>20%)",
+       y = "Frequency")
+
+p17 <- ggplot(data = jails, aes(x = ab_avg, y = COVID.19_Cases)) +
+  geom_boxplot(color = "black", fill = "lavender") +
+  labs(title = "Above Average vs. COVID.19 Cases",
+          x = "Above Average Decrease (>20%)",
+       y = "Number of Cases") +
+  coord_flip()
+
+p18 <- ggplot(data = jails, aes(x = ab_avg, y = COVID.19_Deaths)) +
+  geom_boxplot(color = "black", fill = "pink2") +
+  labs(title = "Above Average vs. COVID.19 Cases",
+       x = "Above Average Decrease (>20%)",
+       y = "Number of Deaths") +
+  coord_flip()
+
+p19 <- ggplot(data = jails, aes(x = ab_avg, y = pctpretrial)) +
+  geom_boxplot(color = "black", fill = "lightskyblue") +
+  labs(title = "Above Average vs. Percent Pretrial",
+          x = "Above Average Decrease (>20%)",
+       y = "Percent Pretrial") +
+  coord_flip()
+
+p20 <- ggplot(data = jails, aes(x = ab_avg, y = pctprison)) +
+  geom_boxplot(color = "black", fill = "yellow2") +
+  labs(title = "Above Average vs. Percent Sentenced",
+          x = "Above Average Decrease (>20%)",
+       y = "Percent Sentenced") +
+  coord_flip()
+
+p21 <- ggplot(data = jails, aes(x = ab_avg, y = pctjailfromother)) +
+  geom_boxplot(color = "black", fill = "steelblue3") +
+  labs(title = "Above Average vs. Percent from Other Jail",
+          x = "Above Average Decrease (>20%)",
+       y = "Percent from Other Jails") +
+  coord_flip()
+
+p22 <- ggplot(data = jails, aes(x = ab_avg, fill = private_jail_flag)) +
+  geom_bar(color = "black", position = "dodge") +
+  scale_fill_manual(values = c("darkseagreen", "pink1")) +
+  labs(title = "Above Average vs. Private Jail",
+       x = "Above Average Decrease (>20%)",
+       y = "Frequency")
+
+p23 <- ggplot(data = jails, aes(x = ab_avg, y = pctblackjail)) +
+  geom_boxplot(color = "black", fill = "violetred1") +
+  labs(title = "Above Average vs. Percent Black in Prisons",
+          x = "Above Average Decrease (>20%)",
+       y = "Percent Black") +
+  coord_flip()
+
+p24 <- ggplot(data = jails, aes(x = ab_avg, y = pctlatinxjail)) +
+geom_boxplot(color = "black", fill = "springgreen4") +
+  labs(title = "Above Average vs. Percent Latinx in Prisons",
+       x = "Above Average Decrease(>20%)",
+       y = "Percent Latinx") + 
+  coord_flip()
+
+p25 <- ggplot(data = jails, aes(x = ab_avg, y = pctwhitejail)) +
+  geom_boxplot(color = "black", fill = "antiquewhite2") +
+  labs(title = "Above Average vs. Percent White in Prisons",
+       x = "Above Average Decrease (>20%)",
+       y = "Percent White") +
+  coord_flip()
 ```
+
+```{r}
+p14 / (p15 | p16)
+
+p17 | p18
+
+p19 / p20 / p21
+
+p21 | p22 | p23
+
+p24 | p25
+```
+
+
+# Model Fitting
 
 
 ```{r Step-wise Strategy for Model Fitting}
 model <- glm(ab_avg ~ County_Profile +
-                Jurisdiction_Profile + COVID.19_Cases + COVID.19_Deaths + urbanicity + private_jail_flag + pctblackjail + pctlatinxjail + pctwhitejail + pctpretrial + pctprison + pctjailfromother + jail_rated_capacity, data = jails)
+                Jurisdiction_Profile + COVID.19_Deaths + urbanicity + private_jail_flag + pctblackjail + pctlatinxjail + pctwhitejail + pctpretrial + pctprison + pctjailfromother + pctcapacity, data = jails)
 
 tidy(model)
 jails = na.omit(jails)
@@ -339,6 +460,13 @@ model_aic <- step(model, direction = "backward", trace=FALSE)
 
 tidy(model_aic) %>%
   select(term, estimate, p.value)
+```
+
+```{r}
+modelfinal <- glm(data = jails, ab_avg ~ County_Profile + private_jail_flag + pctwhitejail + urbanicity + COVID.19_Cases)
+
+tidy(modelfinal) %>%
+  kable(digits = 3, format = "markdown")
 ```
 
 ```{r augmentmodel}

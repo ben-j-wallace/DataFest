@@ -38,7 +38,7 @@ measures <- read.csv("datafiles/statedata.csv")
 global_measures <- read.csv("datafiles/ACAPSGlobalResponse.csv")
 covidapproval <- read.csv("datafiles/Covidapproval_Population.csv")
 jails <- read.csv("datafiles/Jails.finalstates.csv")
-
+lajails <- read.csv("datafiles/la_incarceration.csv")
 ```
 
 ```{r topten}
@@ -136,11 +136,10 @@ jails$CountyState = as.character(jails$CountyState)
 blackgeo$NAME = str_replace(blackgeo$NAME, " County", "")
 blackgeo$NAME = str_replace(blackgeo$NAME, " Parish", "")
 
+jails <- left_join(jails, blackgeo, by = c("CountyState" = "NAME"))
 
 stategeo <- st_as_sf(map("state", plot = FALSE, fill = TRUE))
                         
-jails <- left_join(jails, blackgeo, by = c("CountyState" = "NAME"))
-
 jails <- jails %>%
   drop_na()
 
