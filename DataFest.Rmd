@@ -38,6 +38,7 @@ measures <- read.csv("datafiles/statedata.csv")
 global_measures <- read.csv("datafiles/ACAPSGlobalResponse.csv")
 covidapproval <- read.csv("datafiles/Covidapproval_Population.csv")
 jails <- read.csv("datafiles/Jails.finalstates.csv")
+
 ```
 
 ```{r topten}
