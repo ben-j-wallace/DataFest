@@ -469,6 +469,10 @@ tidy(modelfinal) %>%
   kable(digits = 3, format = "markdown")
 ```
 
+- Change numbers:
+
+$$\widehat{\mbox{Release %}} = 0.853982401 + 0.002954708~\mbox{County_Profile} + 0.172698078	~\mbox{private_jail_flag1} - 0.110669124	~\mbox{pctwhitejail} - 0.110669124	~\mbox{pctwhitejail} - 0.110669124	~\mbox{urbanicitysuburban} - 0.110669124	~\mbox{urbanicityurban} - 0.110669124	~\mbox{COVID.19_Cases	}$$
+
 ```{r augmentmodel}
 model_aug <- augment(model_aic) %>%
   mutate(obs_num = row_number())
