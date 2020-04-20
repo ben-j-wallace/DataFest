@@ -53,6 +53,13 @@ jails <- jails %>%
 lajails$county_name = str_replace(lajails$county_name, " Parish", "")
 ```
 
+```{r LaSalle is La Salle}
+jails$County = as.character(jails$County)
+jails$CountyState = as.character(jails$CountyState)
+jails[27,3] <- "La Salle"
+jails[27,2] <- "La Salle, Louisiana"
+```
+
 ```{r join data}
 
 lajails$county_name = as.factor(lajails$county_name)
@@ -75,90 +82,7 @@ jails <- jails %>%
   mutate(pctcapacity = (jail_rated_capacity)/(total_jail_pop) * 100)
 ```
 
-# Top Ten Drops
-
-```{r top-ten-drops}
-theme_set(theme_bw())
-
-topTenJails <- jails %>%
-  filter(State == "Louisiana") %>%
-  arrange(Percent_Change) %>%
-  mutate(percent_needed = Target_Jail_Population / Jail_Population_Latest * 100) %>%
-  select(County, percent_needed, PreCovid_Jail_Pop) %>%
-  slice(1:10) 
-topTenJails
-
-Int_Plot <- ggplot(topTenJails, aes(x = reorder(County, PreCovid_Jail_Pop), 
-                                    y = percent_needed)) +
-  geom_col() + 
-  coord_flip() + 
-  labs(x = "Jails w/ Biggest Pop. Reduction", y = "Percent (%) Decrease Still Needed
-to Match International Norms",
-  title = "Over-Incarceration Still Exists in Louisiana 
-After Jails Release People Early for COVID-19") + 
-  theme_classic(base_size = 16)
-
-Int_Plot
-
-```
-
-# Slope
-
-```{r slope-chart}
-#top ten jail decreases with initial jail population >50
-topTenJails <- jails %>%
-  arrange(Percent_Change) %>%
-  filter(State == "Louisiana") %>%
-  filter(PreCovid_Jail_Pop > 50) %>%
-  select(CountyState, County, Percent_Change, PreCovid_Jail_Pop, Jail_Population_Latest) %>%
-  slice(1:10) %>%
-  arrange(-PreCovid_Jail_Pop) %>%
-  mutate(class = ifelse(Jail_Population_Latest-PreCovid_Jail_Pop >= 0, "red", "green"))
-         
-topTenJails
-
-left_label <- c(paste(topTenJails$County, topTenJails$PreCovid_Jail_Pop, sep=", ")[1:3],character(7))
-right_label <- c(paste(topTenJails$County, topTenJails$Jail_Population_Latest,sep=", ")[1:3],character(7))
-
-library(scales)
-theme_set(theme_classic())
-p <- ggplot(topTenJails) + 
-  geom_segment(aes(x=1, xend=2, y=PreCovid_Jail_Pop, yend=Jail_Population_Latest, col=class), size=.75, show.legend=F) + 
-  geom_vline(xintercept=1, linetype="dashed", size=.1) + 
-  geom_vline(xintercept=2, linetype="dashed", size=.1) +
-  scale_color_manual(labels = c("Up", "Down"), 
-                     values = c("green"="#00ba38", "red" = "#f8766d")) +  # color of lines
-  xlim(0.5,2.5) +
-  ylim(0,1100) + 
-  labs(x="", 
-       y="# People in Jail", 
-       title = "Slope Chart: Top Ten Jail 
-Population Decreases in Louisiana",
-       caption = "Counties Not Labelled: Washington, Jackson, 
-Concordia, Vernon, Allen, De Soto, Catahoula") + 
-  theme_classic(base_size = 16)
-
-p <- p + geom_text(label=left_label, y=topTenJails$PreCovid_Jail_Pop+10, x=rep(1, NROW(topTenJails)), hjust=1.1, size=3.5)
-p <- p + geom_text(label=right_label, y=topTenJails$Jail_Population_Latest, x=rep(2, NROW(topTenJails)), hjust=-0.1, size=3.5)
-
-
-p <- p + geom_text(label="Before
-           COVID-19", x=1, y=1.12*(max(topTenJails$PreCovid_Jail_Pop, topTenJails$Jail_Population_Latest)), hjust=1, size=5.5)  # title
-p <- p + geom_text(label="4/9/2020", x=2, y=1.12*(max(topTenJails$PreCovid_Jail_Pop, topTenJails$Jail_Population_Latest)), hjust=-0.1, size=5.5)  # title
-
-
-p <- p + theme(panel.background = element_blank(), 
-           panel.grid = element_blank(),
-           axis.ticks = element_blank(),
-           axis.text.x = element_blank(),
-           panel.border = element_blank(),
-           plot.margin = unit(c(1,2,1,2), "cm"))
-
-p
-```
-
-
-# EDA 
+#EDA 
 
 ```{r state racial composition}
 
@@ -386,21 +310,21 @@ p18 <- ggplot(data = jails, aes(x = ab_avg, y = COVID.19_Deaths)) +
 p19 <- ggplot(data = jails, aes(x = ab_avg, y = pctpretrial)) +
   geom_boxplot(color = "black", fill = "lightskyblue") +
   labs(title = "Above Average vs. Percent Pretrial",
-          x = "Above Average Decrease (>20%)",
+          x = "> Avg. Decrease",
        y = "Percent Pretrial") +
   coord_flip()
 
 p20 <- ggplot(data = jails, aes(x = ab_avg, y = pctprison)) +
   geom_boxplot(color = "black", fill = "yellow2") +
   labs(title = "Above Average vs. Percent Sentenced",
-          x = "Above Average Decrease (>20%)",
+          x = "> Avg. Decrease",
        y = "Percent Sentenced") +
   coord_flip()
 
 p21 <- ggplot(data = jails, aes(x = ab_avg, y = pctjailfromother)) +
   geom_boxplot(color = "black", fill = "steelblue3") +
   labs(title = "Above Average vs. Percent from Other Jail",
-          x = "Above Average Decrease (>20%)",
+          x = "> Avg. Decrease",
        y = "Percent from Other Jails") +
   coord_flip()
 
@@ -453,25 +377,11 @@ p24 | p25
 model <- glm(ab_avg ~ County_Profile +
                 Jurisdiction_Profile + COVID.19_Deaths + urbanicity + private_jail_flag + pctblackjail + pctlatinxjail + pctwhitejail + pctpretrial + pctprison + pctjailfromother + pctcapacity, data = jails)
 
-tidy(model)
-jails = na.omit(jails)
-
 model_aic <- step(model, direction = "backward", trace=FALSE) 
 
 tidy(model_aic) %>%
   select(term, estimate, p.value)
 ```
-
-```{r}
-modelfinal <- glm(data = jails, ab_avg ~ County_Profile + private_jail_flag + pctwhitejail + urbanicity + COVID.19_Cases)
-
-tidy(modelfinal) %>%
-  kable(digits = 3, format = "markdown")
-```
-
-- Change numbers:
-
-$$\widehat{\mbox{Release %}} = 0.853982401 + 0.002954708~\mbox{County_Profile} + 0.172698078	~\mbox{private_jail_flag1} - 0.110669124	~\mbox{pctwhitejail} - 0.110669124	~\mbox{pctwhitejail} - 0.110669124	~\mbox{urbanicitysuburban} - 0.110669124	~\mbox{urbanicityurban} - 0.110669124	~\mbox{COVID.19_Cases	}$$
 
 ```{r augmentmodel}
 model_aug <- augment(model_aic) %>%
@@ -489,19 +399,17 @@ high_leverage %>%
   filter(high_lev == TRUE)
 ```
 
-Jefferson has more cases and deaths than most parishes
-
-Morehouse county has a large reduction in prison population.
+Morehouse county has a large percent reduction in prison population.
 
 ```{r std.residuals}
 ggplot(data = model_aug, aes(x = obs_num, y = .std.resid)) +
   geom_point()
 
 model_aug %>%
-  summarise(min = min(.std.resid),
-            max = max(.std.resid),
-            mean = mean(.std.resid),
-            median = median(.std.resid))
+  summarise(min = min(.std.resid, na.rm = TRUE),
+            max = max(.std.resid, na.rm = TRUE),
+            mean = mean(.std.resid, na.rm = TRUE),
+            median = median(.std.resid, na.rm = TRUE))
 
 high_sdresid <- model_aug %>%
   mutate(high_sd = abs(.std.resid) > 2) %>%
