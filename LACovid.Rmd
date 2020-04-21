@@ -111,15 +111,18 @@ stategeo <- st_as_sf(map("state", plot = FALSE, fill = TRUE, state = "LA")) %>%
 
 jails$geom = jails$geometry
 
+jails <- jails %>%
+  mutate(pctblack = value / summary_value)
+
 ```
 
 ```{r Percent black}
 
 ggplot() +
-  geom_sf(aes(geometry = geom, fill = pctblack, color = pctblack), data = jails) +
-  labs(title = "Percent Black by Parish",
-       fill = "Percent Black",
-       color = "Percent Black",
+  geom_sf(aes(geometry = geom, fill = pctwhitejail, color = pctwhitejail), data = jails) +
+  labs(title = "Percent of Prison Population White",
+       fill = "Percent White",
+       color = "Percent White",
        caption = "Parishes excluded:") + 
   scale_fill_viridis(option = "viridis") + 
   scale_color_viridis(option = "viridis") +
@@ -131,7 +134,13 @@ ggplot() +
 ```
 
 ```{r}
+jails %>%
+  summarise(mean = mean(pctblack, na.rm = TRUE),
+          median = median(pctblack, na.rm = TRUE))
 
+jails %>%
+  summarise(mean = mean(pctblackjail, na.rm = TRUE),
+            median = median(pctblackjail, na.rm = TRUE))
 ```
 
 
@@ -152,11 +161,18 @@ ggplot() +
 ```
 
 ```{r}
+jails %>%
+  summarise(mean = mean(County_Profile),
+            median = median(County_Profile))
+```
+
+
+```{r}
 ggplot() +
   geom_sf(aes(geometry = geom, fill = private_jail_flag), data = jails) +
   labs(title = "Private Jails in Louisiana") +
   geom_sf(data = stategeo, fill = NA) +
-  scale_fill_manual(values = c("navy", "darkred")) +
+  scale_fill_manual(values = c("skyblue", "darkred")) +
   theme(panel.background = element_rect(fill = "white"),
         axis.text.y = element_blank(),
         axis.text.x = element_blank(),
@@ -229,7 +245,7 @@ p1 <- ggplot(data = jails, aes(x = Percent_Change)) +
   geom_vline(xintercept = -.2, color = "darkred")
 
 p2 <- ggplot(data = jails, aes(x = County_Profile)) +
-  geom_histogram(binwidth = .025, color = "black", fill = "honeydew") + 
+  geom_histogram(binwidth = 15, color = "black", fill = "honeydew") + 
   labs(title = "County Profile",
        x = "Percentage won by Trump (2016)",
        y = "Frequency")
@@ -410,7 +426,9 @@ p19 / p20 / p21
 
 p21 | p22 | p23
 
-p24 | p25
+p24
+
+p25
 ```
 
 
@@ -419,7 +437,7 @@ p24 | p25
 
 ```{r Step-wise Strategy for Model Fitting}
 model <- glm(ab_avg ~ County_Profile +
-                Jurisdiction_Profile + COVID.19_Deaths + urbanicity + private_jail_flag + pctblackjail + pctlatinxjail + pctwhitejail + pctpretrial + pctprison + pctjailfromother + pctcapacity, data = jails)
+                Jurisdiction_Profile + COVID.19_Deaths + urbanicity + private_jail_flag + pctblackjail + pctlatinxjail + pctwhitejail + pctpretrial + pctprison + pctjailfromother + pctcapacity , data = jails)
 
 model_aic <- step(model, direction = "backward", trace=FALSE) 
 
@@ -503,9 +521,9 @@ plotresid
 # Final Model Output
 
 ```{r final model}
-model_final <- glm(ab_avg ~ County_Profile + urbanicity + private_jail_flag + pctblackjail + pctwhitejail, data = jails)
+model_final <- glm(ab_avg ~ County_Profile + urbanicity + private_jail_flag + pctblackjail + pctwhitejail , data = jails)
 
-tidy(model_final) %>%
+tidy(model_final, exponentiate = TRUE) %>%
   kable(format = "markdown", digits = 3)
 ```
 
