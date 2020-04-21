@@ -49,6 +49,16 @@ jails <- jails %>%
   filter(State == "Louisiana")
 ```
 
+```{r Change County Profile}
+jails <- jails %>%
+  mutate(County_Profile = County_Profile * 100)
+```
+
+```{r}
+jails <- jails %>%
+  mutate(obs_num = c(1:55)) 
+```
+
 ```{r Remove "parish" from name}
 lajails$county_name = str_replace(lajails$county_name, " Parish", "")
 ```
@@ -56,8 +66,8 @@ lajails$county_name = str_replace(lajails$county_name, " Parish", "")
 ```{r LaSalle is La Salle}
 jails$County = as.character(jails$County)
 jails$CountyState = as.character(jails$CountyState)
-jails[27,3] <- "La Salle"
-jails[27,2] <- "La Salle, Louisiana"
+jails[27,2] <- "La Salle"
+jails[27,1] <- "La Salle, Louisiana"
 ```
 
 ```{r join data}
@@ -119,6 +129,40 @@ ggplot() +
         axis.text.x = element_blank(),
         axis.ticks = element_blank()) 
 ```
+
+```{r}
+
+```
+
+
+```{r}
+ggplot() +
+  geom_sf(aes(geometry = geom, fill = County_Profile, color = County_Profile), data = jails) +
+  labs(title = "Percent Won by Donald Trump (2016)",
+       fill = "% Trump",
+       color = "% Trump",
+       caption = "Parishes excluded:") + 
+  scale_fill_viridis(option = "viridis") + 
+  scale_color_viridis(option = "viridis") +
+  geom_sf(data = stategeo, fill = NA) +
+  theme(panel.background = element_rect(fill = "white"),
+        axis.text.y = element_blank(),
+        axis.text.x = element_blank(),
+        axis.ticks = element_blank()) 
+```
+
+```{r}
+ggplot() +
+  geom_sf(aes(geometry = geom, fill = private_jail_flag), data = jails) +
+  labs(title = "Private Jails in Louisiana") +
+  geom_sf(data = stategeo, fill = NA) +
+  scale_fill_manual(values = c("navy", "darkred")) +
+  theme(panel.background = element_rect(fill = "white"),
+        axis.text.y = element_blank(),
+        axis.text.x = element_blank(),
+        axis.ticks = element_blank()) 
+```
+
 
 ```{r Judicial profiles}
 ### Mapping Jurisdictions
@@ -430,5 +474,38 @@ high_cookdist <- model_aug %>%
 
 high_cookdist %>%
   filter(high_cook == TRUE)
+```
+
+```{r creating breaks and residuals}
+grps <- 10
+brks <- quantile(model_aug$.resid, 0:(grps-1)/(grps-1), na.rm=TRUE, 
+                 names = FALSE)
+brks <- round(brks, 3)
+
+residuals <- model_aug %>%
+  select(.resid, obs_num)
+
+jails <- left_join(jails, residuals, by = c("obs_num" = "obs_num"))
+```
+
+```{r residual plot}
+plotresid <- ggplot() +
+  geom_sf(aes(geometry = geom, fill = .resid), data = jails) +
+  labs(title = "Louisiana", 
+       subtitle = "Residuals from Logistic Model") +
+  geom_sf(data = stategeo, fill = NA) +
+  theme_void() + 
+  scale_fill_distiller(palette = 'RdBu', guide = "legend", breaks = brks)
+
+plotresid
+```
+
+# Final Model Output
+
+```{r final model}
+model_final <- glm(ab_avg ~ County_Profile + urbanicity + private_jail_flag + pctblackjail + pctwhitejail, data = jails)
+
+tidy(model_final) %>%
+  kable(format = "markdown", digits = 3)
 ```
 
