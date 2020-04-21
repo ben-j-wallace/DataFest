@@ -54,7 +54,7 @@ jails <- jails %>%
   mutate(County_Profile = County_Profile * 100)
 ```
 
-```{r}
+```{r obs_num}
 jails <- jails %>%
   mutate(obs_num = c(1:55)) 
 ```
@@ -66,8 +66,8 @@ lajails$county_name = str_replace(lajails$county_name, " Parish", "")
 ```{r LaSalle is La Salle}
 jails$County = as.character(jails$County)
 jails$CountyState = as.character(jails$CountyState)
-jails[27,2] <- "La Salle"
-jails[27,1] <- "La Salle, Louisiana"
+jails[27,3] <- "La Salle"
+jails[27,2] <- "La Salle, Louisiana"
 ```
 
 ```{r join data}
@@ -110,10 +110,6 @@ stategeo <- st_as_sf(map("state", plot = FALSE, fill = TRUE, state = "LA")) %>%
   filter(ID == "louisiana") 
 
 jails$geom = jails$geometry
-
-jails <- jails %>%
-  mutate(pctblack = value / summary_value)
-
 ```
 
 ```{r Percent black}
@@ -418,7 +414,11 @@ p25 <- ggplot(data = jails, aes(x = ab_avg, y = pctwhitejail)) +
 ```
 
 ```{r}
-p14 / (p15 | p16)
+p14 
+
+p15  
+
+p16
 
 p17 | p18
 
@@ -526,4 +526,65 @@ model_final <- glm(ab_avg ~ County_Profile + urbanicity + private_jail_flag + pc
 tidy(model_final, exponentiate = TRUE) %>%
   kable(format = "markdown", digits = 3)
 ```
+
+```{r}
+
+averages <- jails %>%
+  group_by(ab_avg) %>%
+  summarise(avgs = mean(pctwhitejail))
+
+averages <- averages %>%
+  rename(`Percent of Prisoners White` = avgs) %>%
+  rename(`Above Average Decrease in Prisoners` = ab_avg)
+
+ggplot() +
+  geom_col(aes(x = `Above Average Decrease in Prisoners`, y= `Percent of Prisoners White`), data = averages, fill = c("red", "skyblue")) 
+```
+
+```{r}
+plotbiv <- jails %>%
+  arrange(County_Profile) %>%
+  arrange(ab_avg) %>%
+  mutate(obs_num = c(1:55))
+
+ggplot () +
+  geom_col(aes(x = obs_num, y = County_Profile, fill = ab_avg), data = plotbiv)
+```
+
+```{r}
+averagespct <- jails %>%
+  group_by(ab_avg) %>%
+  summarise(avgs = mean(County_Profile))
+
+averagespct <- averagespct %>%
+  rename(`% Won by Donald Trump 2016` = avgs) %>%
+  rename(`Above Average Decrease in Prisoners` = ab_avg)
+
+ggplot() +
+  geom_col(aes(x = `Above Average Decrease in Prisoners`, y= `% Won by Donald Trump 2016`), data = averagespct, fill = c("red", "skyblue")) 
+```
+
+```{r}
+numrural <- jails %>%
+  mutate(`Low Population Counties (< 50000)` = Resident_population <= 50000) %>%
+  rename(`Above Average Decrease in Prisoners` = ab_avg) %>%
+  select(`Low Population Counties (< 50000)`, `Above Average Decrease in Prisoners`)
+
+
+numrural2 <- numrural %>%
+  filter(`Low Population Counties (< 50000)` == TRUE)
+
+plotrural <- ggplot() +
+  geom_bar(aes(x = `Above Average Decrease in Prisoners`), data = numrural2)
+
+plotrural2 <- ggplot() +
+  geom_bar(aes(x = `Low Population Counties (< 50000)`), data = numrural)
+
+```
+
+```{r}
+plotrural | plotrural2
+```
+
+
 
