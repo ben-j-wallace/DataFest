@@ -450,6 +450,34 @@ tidy(model_aic) %>%
   select(term, estimate, p.value)
 ```
 
+There are not enough observations of urban parishes (only one) for us to include urbanicity in the model. There also does not appear to be a significant relationship, as shown in the model as well as the bar graph below.
+
+```{r}
+numrural <- jails %>%
+  mutate(`Low Population Counties (< 50000)` = Resident_population <= 50000) %>%
+  rename(`Above Average Decrease in Prisoners` = ab_avg) %>%
+  select(`Low Population Counties (< 50000)`, `Above Average Decrease in Prisoners`)
+
+
+numrural2 <- numrural %>%
+  filter(`Low Population Counties (< 50000)` == TRUE)
+
+plotrural <- ggplot() +
+  geom_bar(aes(x = `Above Average Decrease in Prisoners`), data = numrural2, fill = "green4") +
+  labs(y = "Number of Low Population Counties",
+       title = "Rural Parishes are Not Substantially Reducing Jail Populations")
+
+plotrural2 <- ggplot() +
+  geom_bar(aes(x = `Low Population Counties (< 50000)`, fill = `Above Average Decrease in Prisoners`), position = "fill", data = numrural) + 
+  labs(y = "Relative Frequency",
+       title = "No relationship between population size and number of people released")
+
+```
+
+```{r}
+plotrural2
+```
+
 ```{r augmentmodel}
 model_aug <- augment(model_aic, type.predict = "response", type.residuals = "response") %>%
   mutate(obs_num = row_number())
@@ -569,28 +597,21 @@ ggplot() +
   geom_col(aes(x = `Above Average Decrease in Prisoners`, y= `Average % Won by Donald Trump 2016`), data = averagespct, fill = c("red", "skyblue")) 
 ```
 
-```{r}
-numrural <- jails %>%
-  mutate(`Low Population Counties (< 50000)` = Resident_population <= 50000) %>%
-  rename(`Above Average Decrease in Prisoners` = ab_avg) %>%
-  select(`Low Population Counties (< 50000)`, `Above Average Decrease in Prisoners`)
-
-
-numrural2 <- numrural %>%
-  filter(`Low Population Counties (< 50000)` == TRUE)
-
-plotrural <- ggplot() +
-  geom_bar(aes(x = `Above Average Decrease in Prisoners`), data = numrural2, fill = "green4") +
-  labs(y = "Number of Low Population Counties",
-       title = "Rural Parishes are Not Substantially Reducing Jail Populations")
-
-plotrural2 <- ggplot() +
-  geom_bar(aes(x = `Low Population Counties (< 50000)`), data = numrural)
-
-```
 
 ```{r}
-plotrural | plotrural2
+jails <- jails %>%
+  rename(`Above Average Decrease in Prisoners` = ab_avg)
+
+jails$`Above Average Decrease in Prisoners` = as.factor(jails$`Above Average Decrease in Prisoners`)
+
+jails$`Above Average Decrease in Prisoners`= recode(jails$`Above Average Decrease in Prisoners`, "TRUE"= "Yes", "FALSE" = "No")
+
+ggplot(data = jails) +
+  geom_bar(aes(x = Jurisdiction_Profile, fill = `Above Average Decrease in Prisoners`), position = "fill", color = "black") +
+  scale_fill_brewer(type = "seq", palette = "Set1") +
+  labs(x = "Polical Leaning of Judicial System",
+       y = "Relative Frequency",
+       caption = "source: uslaw.org")
 ```
 
 
