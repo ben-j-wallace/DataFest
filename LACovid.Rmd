@@ -92,6 +92,60 @@ jails <- jails %>%
   mutate(pctcapacity = (jail_rated_capacity)/(total_jail_pop) * 100)
 ```
 
+# Slope Chart
+
+```{r slope-chart}
+#top ten jail decreases with initial jail population >50
+topTenJails <- jails %>%
+  arrange(Percent_Change) %>%
+  filter(State == "Louisiana") %>%
+  filter(PreCovid_Jail_Pop > 50) %>%
+  select(CountyState, County, Percent_Change, PreCovid_Jail_Pop, Jail_Population_Latest) %>%
+  slice(1:10) %>%
+  arrange(-PreCovid_Jail_Pop) %>%
+  mutate(class = ifelse(Jail_Population_Latest-PreCovid_Jail_Pop >= 0, "red", "green"))
+         
+topTenJails
+
+left_label <- c(paste(topTenJails$County, topTenJails$PreCovid_Jail_Pop, sep=", ")[1:3],character(7))
+right_label <- c(paste(topTenJails$County, topTenJails$Jail_Population_Latest,sep=", ")[1:3],character(7))
+
+library(scales)
+theme_set(theme_classic())
+p <- ggplot(topTenJails) + 
+  geom_segment(aes(x=1, xend=2, y=PreCovid_Jail_Pop, yend=Jail_Population_Latest, col=class), size=.75, show.legend=F) + 
+  geom_vline(xintercept=1, linetype="dashed", size=.1) + 
+  geom_vline(xintercept=2, linetype="dashed", size=.1) +
+  scale_color_manual(labels = c("Up", "Down"), 
+                     values = c("green"="#00ba38", "red" = "#f8766d")) +  # color of lines
+  xlim(0.5,2.5) +
+  ylim(0,1100) + 
+  labs(x="", 
+       y="# People in Jail", 
+       title = "Slope Chart: Top Ten Fractional 
+Population Decreases in Louisiana Jails",
+       caption = "Parishes Not Labelled: Washington, Jackson, 
+Concordia, Vernon, Allen, De Soto, Catahoula") + 
+  theme_classic(base_size = 16)
+
+p <- p + geom_text(label=left_label, y=topTenJails$PreCovid_Jail_Pop+10, x=rep(1, NROW(topTenJails)), hjust=1.1, size=3.5)
+p <- p + geom_text(label=right_label, y=topTenJails$Jail_Population_Latest, x=rep(2, NROW(topTenJails)), hjust=-0.1, size=3.5)
+
+
+p <- p + geom_text(label="2/29/2020", x=1, y=1.12*(max(topTenJails$PreCovid_Jail_Pop, topTenJails$Jail_Population_Latest)), hjust=1, size=5.5)  # title
+p <- p + geom_text(label="4/9/2020", x=2, y=1.12*(max(topTenJails$PreCovid_Jail_Pop, topTenJails$Jail_Population_Latest)), hjust=-0.1, size=5.5)  # title
+
+
+p <- p + theme(panel.background = element_blank(), 
+           panel.grid = element_blank(),
+           axis.ticks = element_blank(),
+           axis.text.x = element_blank(),
+           panel.border = element_blank(),
+           plot.margin = unit(c(1,2,1,2), "cm"))
+
+p
+```
+
 #EDA 
 
 ```{r state racial composition}
@@ -128,10 +182,6 @@ ggplot() +
         axis.text.y = element_blank(),
         axis.text.x = element_blank(),
         axis.ticks = element_blank()) 
-```
-
-```{r}
-
 ```
 
 
@@ -505,7 +555,6 @@ plotresid
 ```{r final model}
 model_final <- glm(ab_avg ~ County_Profile + urbanicity + private_jail_flag + pctblackjail + pctwhitejail, data = jails)
 
-tidy(model_final) %>%
-  kable(format = "markdown", digits = 3)
+final_model <- tidy(model_final) 
 ```
 
