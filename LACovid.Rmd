@@ -183,8 +183,6 @@ ggplot() +
         axis.ticks = element_blank()) 
 ```
 
-<<<<<<< HEAD
-=======
 ```{r}
 jails %>%
   summarise(mean = mean(pctblack, na.rm = TRUE),
@@ -195,7 +193,6 @@ jails %>%
             median = median(pctblackjail, na.rm = TRUE))
 ```
 
->>>>>>> ea4a2a968c78426658094916ea94e20e75bdae10
 
 ```{r}
 ggplot() +
@@ -225,16 +222,19 @@ jails$`Private Jail` = jails$private_jail_flag
 
 jails$`Private Jail` = recode_factor(jails$`Private Jail`, "0" = "No", "1" = "Yes")
 
-ggplot() +
-  geom_sf(aes(geometry = geom, fill = `Private Jail`), data = jails) +
-  labs(title = "Private Jails Concentrated in Northeastern Louisiana",
-       caption = "White parishes have unavailable data") +
+privatejail <- ggplot() +
   geom_sf(data = stategeo, fill = NA) +
+  geom_sf(aes(geometry = geom, fill = `Private Jail`), data = jails) +
   scale_fill_manual(values = c("skyblue", "darkred")) +
+  theme_classic(base_size = 13) +
+  labs(title = "Private Jails Concentrated 
+in Northeastern Louisiana",
+       caption = "White parishes have unavailable data") +
   theme(panel.background = element_rect(fill = "white"),
         axis.text.y = element_blank(),
         axis.text.x = element_blank(),
-        axis.ticks = element_blank()) 
+        axis.ticks = element_blank(),
+        panel.border = element_blank())
 ```
 
 
@@ -606,12 +606,9 @@ ggplot(data = residuals) +
 ```{r final model}
 model_final <- glm(ab_avg ~ County_Profile + urbanicity + private_jail_flag + pctblackjail + pctwhitejail , data = jails)
 
-<<<<<<< HEAD
 final_model <- tidy(model_final) 
-=======
 tidy(model_final, exponentiate = TRUE) %>%
   kable(format = "markdown", digits = 3)
->>>>>>> ea4a2a968c78426658094916ea94e20e75bdae10
 ```
 
 ```{r}
@@ -667,14 +664,47 @@ jails$`Above Average Decrease in Prisoners` = as.factor(jails$`Above Average Dec
 
 jails$`Above Average Decrease in Prisoners`= recode(jails$`Above Average Decrease in Prisoners`, "TRUE"= "Yes", "FALSE" = "No")
 
-ggplot(data = jails) +
-  geom_bar(aes(x = Jurisdiction_Profile, fill = `Above Average Decrease in Prisoners`), position = "fill", color = "black") +
-  scale_fill_brewer(type = "seq", palette = "Set1") +
+jurisdiction <- ggplot(data = jails) +
+geom_bar(aes(x = Jurisdiction_Profile, fill = `Above Average Decrease in Prisoners`), position = "fill", color = "black") +
+  scale_fill_brewer(type = "seq", palette = "Greens") +
+  scale_x_discrete(limits = c("Liberal", "Moderate", "Conservative")) +
   labs(x = "Polical Leaning of Judicial System",
        y = "Relative Frequency",
+       fill = "Above Average
+Decrease",
+       title = "Liberal Jurisdictions
+Release Fewer People from Jail",
        caption = "source: uslaw.org")
 ```
 
 
+
+```{r}
+ggplot(data = jails) +
+  geom_bar(aes(x = private_jail_flag, fill = `Above Average Decrease in Prisoners`), position = "fill", color = "black") +
+  scale_fill_brewer(type = "seq", palette = "Set1") +
+  labs(x = "Private Jail",
+       y = "Relative Frequency",
+       caption = "source: uslaw.org")
+
+
+```
+
+```{r}
+private <- jails %>%
+  group_by(private_jail_flag, `Above Average Decrease in Prisoners`) %>%
+  count()
+
+privateyes <- private %>%
+  filter(private_jail_flag == 1)
+
+privateno <- private %>%
+  filter(private_jail_flag == 0)
+
+ggplot(data = privateyes, aes(x = "", fill = `Above Average Decrease in Prisoners`, y = n)) +
+  coord_polar("y", start = 0) +
+  scale_fill_manual(values = c("red", "blue")) +
+  theme_void()
+```
 
 
