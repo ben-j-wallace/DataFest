@@ -54,7 +54,7 @@ jails <- jails %>%
   mutate(County_Profile = County_Profile * 100)
 ```
 
-```{r}
+```{r obs_num}
 jails <- jails %>%
   mutate(obs_num = c(1:55)) 
 ```
@@ -66,8 +66,8 @@ lajails$county_name = str_replace(lajails$county_name, " Parish", "")
 ```{r LaSalle is La Salle}
 jails$County = as.character(jails$County)
 jails$CountyState = as.character(jails$CountyState)
-jails[27,2] <- "La Salle"
-jails[27,1] <- "La Salle, Louisiana"
+jails[27,3] <- "La Salle"
+jails[27,2] <- "La Salle, Louisiana"
 ```
 
 ```{r join data}
@@ -164,16 +164,15 @@ stategeo <- st_as_sf(map("state", plot = FALSE, fill = TRUE, state = "LA")) %>%
   filter(ID == "louisiana") 
 
 jails$geom = jails$geometry
-
 ```
 
 ```{r Percent black}
 
 ggplot() +
-  geom_sf(aes(geometry = geom, fill = pctblack, color = pctblack), data = jails) +
-  labs(title = "Percent Black by Parish",
-       fill = "Percent Black",
-       color = "Percent Black",
+  geom_sf(aes(geometry = geom, fill = pctwhitejail, color = pctwhitejail), data = jails) +
+  labs(title = "Percent of Prison Population White",
+       fill = "Percent White",
+       color = "Percent White",
        caption = "Parishes excluded:") + 
   scale_fill_viridis(option = "viridis") + 
   scale_color_viridis(option = "viridis") +
@@ -184,6 +183,19 @@ ggplot() +
         axis.ticks = element_blank()) 
 ```
 
+<<<<<<< HEAD
+=======
+```{r}
+jails %>%
+  summarise(mean = mean(pctblack, na.rm = TRUE),
+          median = median(pctblack, na.rm = TRUE))
+
+jails %>%
+  summarise(mean = mean(pctblackjail, na.rm = TRUE),
+            median = median(pctblackjail, na.rm = TRUE))
+```
+
+>>>>>>> ea4a2a968c78426658094916ea94e20e75bdae10
 
 ```{r}
 ggplot() +
@@ -202,11 +214,23 @@ ggplot() +
 ```
 
 ```{r}
+jails %>%
+  summarise(mean = mean(County_Profile),
+            median = median(County_Profile))
+```
+
+
+```{r}
+jails$`Private Jail` = jails$private_jail_flag
+
+jails$`Private Jail` = recode_factor(jails$`Private Jail`, "0" = "No", "1" = "Yes")
+
 ggplot() +
-  geom_sf(aes(geometry = geom, fill = private_jail_flag), data = jails) +
-  labs(title = "Private Jails in Louisiana") +
+  geom_sf(aes(geometry = geom, fill = `Private Jail`), data = jails) +
+  labs(title = "Private Jails Concentrated in Northeastern Louisiana",
+       caption = "White parishes have unavailable data") +
   geom_sf(data = stategeo, fill = NA) +
-  scale_fill_manual(values = c("navy", "darkred")) +
+  scale_fill_manual(values = c("skyblue", "darkred")) +
   theme(panel.background = element_rect(fill = "white"),
         axis.text.y = element_blank(),
         axis.text.x = element_blank(),
@@ -279,7 +303,7 @@ p1 <- ggplot(data = jails, aes(x = Percent_Change)) +
   geom_vline(xintercept = -.2, color = "darkred")
 
 p2 <- ggplot(data = jails, aes(x = County_Profile)) +
-  geom_histogram(binwidth = .025, color = "black", fill = "honeydew") + 
+  geom_histogram(binwidth = 15, color = "black", fill = "honeydew") + 
   labs(title = "County Profile",
        x = "Percentage won by Trump (2016)",
        y = "Frequency")
@@ -452,7 +476,11 @@ p25 <- ggplot(data = jails, aes(x = ab_avg, y = pctwhitejail)) +
 ```
 
 ```{r}
-p14 / (p15 | p16)
+p14 
+
+p15  
+
+p16
 
 p17 | p18
 
@@ -460,7 +488,9 @@ p19 / p20 / p21
 
 p21 | p22 | p23
 
-p24 | p25
+p24
+
+p25
 ```
 
 
@@ -469,7 +499,7 @@ p24 | p25
 
 ```{r Step-wise Strategy for Model Fitting}
 model <- glm(ab_avg ~ County_Profile +
-                Jurisdiction_Profile + COVID.19_Deaths + urbanicity + private_jail_flag + pctblackjail + pctlatinxjail + pctwhitejail + pctpretrial + pctprison + pctjailfromother + pctcapacity, data = jails)
+                Jurisdiction_Profile + COVID.19_Deaths + urbanicity + private_jail_flag + pctblackjail + pctlatinxjail + pctwhitejail + pctpretrial + pctprison + pctjailfromother + pctcapacity , data = jails, family = binomial)
 
 model_aic <- step(model, direction = "backward", trace=FALSE) 
 
@@ -477,13 +507,41 @@ tidy(model_aic) %>%
   select(term, estimate, p.value)
 ```
 
+There are not enough observations of urban parishes (only one) for us to include urbanicity in the model. There also does not appear to be a significant relationship, as shown in the model as well as the bar graph below.
+
+```{r}
+numrural <- jails %>%
+  mutate(`Low Population Counties (< 50000)` = Resident_population <= 50000) %>%
+  rename(`Above Average Decrease in Prisoners` = ab_avg) %>%
+  select(`Low Population Counties (< 50000)`, `Above Average Decrease in Prisoners`)
+
+
+numrural2 <- numrural %>%
+  filter(`Low Population Counties (< 50000)` == TRUE)
+
+plotrural <- ggplot() +
+  geom_bar(aes(x = `Above Average Decrease in Prisoners`), data = numrural2, fill = "green4") +
+  labs(y = "Number of Low Population Counties",
+       title = "Rural Parishes are Not Substantially Reducing Jail Populations")
+
+plotrural2 <- ggplot() +
+  geom_bar(aes(x = `Low Population Counties (< 50000)`, fill = `Above Average Decrease in Prisoners`), position = "fill", data = numrural) + 
+  labs(y = "Relative Frequency",
+       title = "No relationship between population size and number of people released")
+
+```
+
+```{r}
+plotrural2
+```
+
 ```{r augmentmodel}
-model_aug <- augment(model_aic) %>%
+model_aug <- augment(model_aic, type.predict = "response", type.residuals = "response") %>%
   mutate(obs_num = row_number())
 ```
 
 ```{r leverage}
-leverage_threshold <- 2*(8 + 1)/nrow(model_aug)
+leverage_threshold <- 2*(10 + 1)/nrow(model_aug)
 
 high_leverage <- model_aug %>%
   mutate(high_lev = .hat > leverage_threshold) %>%
@@ -535,26 +593,88 @@ brks <- round(brks, 3)
 residuals <- model_aug %>%
   select(.resid, obs_num)
 
-jails <- left_join(jails, residuals, by = c("obs_num" = "obs_num"))
+residuals <- left_join(residuals, jails, by = c("obs_num" = "obs_num"))
 ```
 
-```{r residual plot}
-plotresid <- ggplot() +
-  geom_sf(aes(geometry = geom, fill = .resid), data = jails) +
-  labs(title = "Louisiana", 
-       subtitle = "Residuals from Logistic Model") +
-  geom_sf(data = stategeo, fill = NA) +
-  theme_void() + 
-  scale_fill_distiller(palette = 'RdBu', guide = "legend", breaks = brks)
-
-plotresid
+```{r}
+ggplot(data = residuals) +
+  geom_point(aes(x = pctwhitejail, y = .resid))
 ```
 
 # Final Model Output
 
 ```{r final model}
-model_final <- glm(ab_avg ~ County_Profile + urbanicity + private_jail_flag + pctblackjail + pctwhitejail, data = jails)
+model_final <- glm(ab_avg ~ County_Profile + urbanicity + private_jail_flag + pctblackjail + pctwhitejail , data = jails)
 
+<<<<<<< HEAD
 final_model <- tidy(model_final) 
+=======
+tidy(model_final, exponentiate = TRUE) %>%
+  kable(format = "markdown", digits = 3)
+>>>>>>> ea4a2a968c78426658094916ea94e20e75bdae10
 ```
+
+```{r}
+
+averages <- jails %>%
+  group_by(ab_avg) %>%
+  summarise(avgs = mean(pctwhitejail))
+
+averages <- averages %>%
+  rename(`Average Percent of Prisoners White` = avgs) %>%
+  rename(`Above Average Decrease in Prisoners` = ab_avg)
+
+ggplot() +
+  geom_col(aes(x = `Above Average Decrease in Prisoners`, y= `Average Percent of Prisoners White`), data = averages, fill = c("red", "skyblue")) 
+```
+
+```{r}
+plotbiv <- jails %>%
+  arrange(County_Profile) %>%
+  arrange(ab_avg) %>%
+  mutate(obs_num = c(1:55))
+
+ab_avgyes <- 63.43437
+
+ab_avgno <- 66.26419
+
+ggplot () +
+  geom_col(aes(x = obs_num, y = County_Profile, fill = ab_avg), data = plotbiv, color = "black") +
+  scale_fill_manual(values = c("tomato", "skyblue")) +
+  geom_hline(yintercept = ab_avgyes, color = "skyblue") +
+  geom_hline(yintercept = ab_avgno, color = "tomato")
+```
+
+```{r}
+averagespct <- jails %>%
+  group_by(ab_avg) %>%
+  summarise(avgs = mean(County_Profile))
+
+averagespct <- averagespct %>%
+  rename(`Average % Won by Donald Trump 2016` = avgs) %>%
+  rename(`Above Average Decrease in Prisoners` = ab_avg)
+
+ggplot() +
+  geom_col(aes(x = `Above Average Decrease in Prisoners`, y= `Average % Won by Donald Trump 2016`), data = averagespct, fill = c("red", "skyblue")) 
+```
+
+
+```{r}
+jails <- jails %>%
+  rename(`Above Average Decrease in Prisoners` = ab_avg)
+
+jails$`Above Average Decrease in Prisoners` = as.factor(jails$`Above Average Decrease in Prisoners`)
+
+jails$`Above Average Decrease in Prisoners`= recode(jails$`Above Average Decrease in Prisoners`, "TRUE"= "Yes", "FALSE" = "No")
+
+ggplot(data = jails) +
+  geom_bar(aes(x = Jurisdiction_Profile, fill = `Above Average Decrease in Prisoners`), position = "fill", color = "black") +
+  scale_fill_brewer(type = "seq", palette = "Set1") +
+  labs(x = "Polical Leaning of Judicial System",
+       y = "Relative Frequency",
+       caption = "source: uslaw.org")
+```
+
+
+
 
