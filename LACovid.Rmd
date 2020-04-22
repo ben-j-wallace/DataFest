@@ -164,9 +164,14 @@ jails %>%
 
 
 ```{r}
+jails$`Private Jail` = jails$private_jail_flag
+
+jails$`Private Jail` = recode_factor(jails$`Private Jail`, "0" = "No", "1" = "Yes")
+
 ggplot() +
-  geom_sf(aes(geometry = geom, fill = private_jail_flag), data = jails) +
-  labs(title = "Private Jails in Louisiana") +
+  geom_sf(aes(geometry = geom, fill = `Private Jail`), data = jails) +
+  labs(title = "Private Jails Concentrated in Northeastern Louisiana",
+       caption = "White parishes have unavailable data") +
   geom_sf(data = stategeo, fill = NA) +
   scale_fill_manual(values = c("skyblue", "darkred")) +
   theme(panel.background = element_rect(fill = "white"),
@@ -437,7 +442,7 @@ p25
 
 ```{r Step-wise Strategy for Model Fitting}
 model <- glm(ab_avg ~ County_Profile +
-                Jurisdiction_Profile + COVID.19_Deaths + urbanicity + private_jail_flag + pctblackjail + pctlatinxjail + pctwhitejail + pctpretrial + pctprison + pctjailfromother + pctcapacity , data = jails)
+                Jurisdiction_Profile + COVID.19_Deaths + urbanicity + private_jail_flag + pctblackjail + pctlatinxjail + pctwhitejail + pctpretrial + pctprison + pctjailfromother + pctcapacity , data = jails, family = binomial)
 
 model_aic <- step(model, direction = "backward", trace=FALSE) 
 
@@ -446,12 +451,12 @@ tidy(model_aic) %>%
 ```
 
 ```{r augmentmodel}
-model_aug <- augment(model_aic) %>%
+model_aug <- augment(model_aic, type.predict = "response", type.residuals = "response") %>%
   mutate(obs_num = row_number())
 ```
 
 ```{r leverage}
-leverage_threshold <- 2*(8 + 1)/nrow(model_aug)
+leverage_threshold <- 2*(10 + 1)/nrow(model_aug)
 
 high_leverage <- model_aug %>%
   mutate(high_lev = .hat > leverage_threshold) %>%
@@ -503,19 +508,12 @@ brks <- round(brks, 3)
 residuals <- model_aug %>%
   select(.resid, obs_num)
 
-jails <- left_join(jails, residuals, by = c("obs_num" = "obs_num"))
+residuals <- left_join(residuals, jails, by = c("obs_num" = "obs_num"))
 ```
 
-```{r residual plot}
-plotresid <- ggplot() +
-  geom_sf(aes(geometry = geom, fill = .resid), data = jails) +
-  labs(title = "Louisiana", 
-       subtitle = "Residuals from Logistic Model") +
-  geom_sf(data = stategeo, fill = NA) +
-  theme_void() + 
-  scale_fill_distiller(palette = 'RdBu', guide = "legend", breaks = brks)
-
-plotresid
+```{r}
+ggplot(data = residuals) +
+  geom_point(aes(x = pctwhitejail, y = .resid))
 ```
 
 # Final Model Output
@@ -534,11 +532,11 @@ averages <- jails %>%
   summarise(avgs = mean(pctwhitejail))
 
 averages <- averages %>%
-  rename(`Percent of Prisoners White` = avgs) %>%
+  rename(`Average Percent of Prisoners White` = avgs) %>%
   rename(`Above Average Decrease in Prisoners` = ab_avg)
 
 ggplot() +
-  geom_col(aes(x = `Above Average Decrease in Prisoners`, y= `Percent of Prisoners White`), data = averages, fill = c("red", "skyblue")) 
+  geom_col(aes(x = `Above Average Decrease in Prisoners`, y= `Average Percent of Prisoners White`), data = averages, fill = c("red", "skyblue")) 
 ```
 
 ```{r}
@@ -547,8 +545,15 @@ plotbiv <- jails %>%
   arrange(ab_avg) %>%
   mutate(obs_num = c(1:55))
 
+ab_avgyes <- 63.43437
+
+ab_avgno <- 66.26419
+
 ggplot () +
-  geom_col(aes(x = obs_num, y = County_Profile, fill = ab_avg), data = plotbiv)
+  geom_col(aes(x = obs_num, y = County_Profile, fill = ab_avg), data = plotbiv, color = "black") +
+  scale_fill_manual(values = c("tomato", "skyblue")) +
+  geom_hline(yintercept = ab_avgyes, color = "skyblue") +
+  geom_hline(yintercept = ab_avgno, color = "tomato")
 ```
 
 ```{r}
@@ -557,11 +562,11 @@ averagespct <- jails %>%
   summarise(avgs = mean(County_Profile))
 
 averagespct <- averagespct %>%
-  rename(`% Won by Donald Trump 2016` = avgs) %>%
+  rename(`Average % Won by Donald Trump 2016` = avgs) %>%
   rename(`Above Average Decrease in Prisoners` = ab_avg)
 
 ggplot() +
-  geom_col(aes(x = `Above Average Decrease in Prisoners`, y= `% Won by Donald Trump 2016`), data = averagespct, fill = c("red", "skyblue")) 
+  geom_col(aes(x = `Above Average Decrease in Prisoners`, y= `Average % Won by Donald Trump 2016`), data = averagespct, fill = c("red", "skyblue")) 
 ```
 
 ```{r}
@@ -575,7 +580,9 @@ numrural2 <- numrural %>%
   filter(`Low Population Counties (< 50000)` == TRUE)
 
 plotrural <- ggplot() +
-  geom_bar(aes(x = `Above Average Decrease in Prisoners`), data = numrural2)
+  geom_bar(aes(x = `Above Average Decrease in Prisoners`), data = numrural2, fill = "green4") +
+  labs(y = "Number of Low Population Counties",
+       title = "Rural Parishes are Not Substantially Reducing Jail Populations")
 
 plotrural2 <- ggplot() +
   geom_bar(aes(x = `Low Population Counties (< 50000)`), data = numrural)
@@ -585,6 +592,7 @@ plotrural2 <- ggplot() +
 ```{r}
 plotrural | plotrural2
 ```
+
 
 
 
