@@ -1,36 +1,34 @@
 ---
-title: "Jails"
+title: "Examining Coronavirus in Louisiana Jails"
 author: "Albert Sun and Ben Wallace"
 date: "4/19/2020"
-output: html_document
+output:
+  pdf_document: default
+  html_document: default
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-```{r upload packages, results = "hide"}
-library(dplyr)
+```{r upload packages, include=FALSE}
 library(knitr)
-library(ggplot2)
 library(patchwork)
-library(twitteR)
 library(lubridate)
 library(rvest)
 library(sf)
 library(tidycensus)
 library(mapview)
 library(broom)
-library(tidyverse)       # Tidyverse for Tidy Data
+library(tidyverse)    
 library(readxl)
 library(tigris)
 library(sf)
 library(viridis)
-library(stringr)
 library(maps)
 ```
 
-```{r read files, results = "hide"}
+```{r read files}
 jails <- read.csv("datafiles/Jails.finalstates.csv")
 lajails <- read.csv("datafiles/la_incarceration.csv")
 ```
@@ -40,7 +38,7 @@ jails %>%
   summarise(n(), n_distinct(State_Abbrev)) 
 ```
 
-We have data from 334 counties from 27 states.
+We have jail data from 334 counties from 27 states.
 
 # Data Wrangling
 
@@ -604,10 +602,7 @@ plotrural2 <- ggplot() +
   labs(y = "Relative Frequency",
        title = "No relationship between population size and number of people released")
 
-```
-
-```{r}
-plotrural2
+plotrural | plotrural2
 ```
 
 ```{r augmentmodel}
@@ -619,6 +614,8 @@ residuals <- model_aug %>%
 
 jails = left_join(jails, residuals, by = ("obs_num" = "obs_num"))
 ```
+
+# Diagnostics
 
 ```{r plot of residuals}
 laplot <-ggplot() +
@@ -649,7 +646,6 @@ high_leverage %>%
   filter(high_lev == TRUE)
 ```
 
-Morehouse county has a large percent reduction in prison population.
 
 ```{r std.residuals}
 ggplot(data = model_aug, aes(x = obs_num, y = .std.resid)) +
@@ -682,18 +678,7 @@ high_cookdist %>%
   filter(high_cook == TRUE)
 ```
 
-```{r creating breaks and residuals}
-grps <- 10
-brks <- quantile(model_aug$.resid, 0:(grps-1)/(grps-1), na.rm=TRUE, 
-                 names = FALSE)
-brks <- round(brks, 3)
-
-residuals <- model_aug %>%
-  select(.resid, obs_num)
-
-residuals <- left_join(residuals, jails, by = c("obs_num" = "obs_num"))
-```
-
+# Plots used in presentation
 
 ```{r}
 
@@ -714,7 +699,7 @@ Decrease",
 Release Fewer People from Jail",
        caption = "source: uslaw.org")
        
-       
+jurisdiction 
 ```
 
 
@@ -770,6 +755,16 @@ subtitle = "Public Jails") +
         axis.title.y = element_blank(),
         axis.line = element_blank())
 
+privateplot | publicplot
 ```
 
+# References in presentation:
+
+(1) Data from Vera Institute: https://www.vera.org/blog/covid-19-1/use-this-data-to-hold-your-local-jail-accountable-during-the-pandemic
+
+(2) Jurisdiction Profiles USLaw 2019-2020 (political orientation): https://web.uslaw.org/resources/state-judicial-profiles-by-county/
+
+(3) Political profile by Parish taken here: https://www.politico.com/2016-election/results/map/president/louisiana/
+
+(4) Louisiana #1 most incarcerated in the world: https://theintercept.com/2020/04/07/louisiana-coronavirus-prisons/
 
