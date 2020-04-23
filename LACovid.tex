@@ -1,0 +1,1010 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+]{article}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\hypersetup{
+  pdftitle={Examining Coronavirus in Louisiana Jails},
+  pdfauthor={Albert Sun and Ben Wallace},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+\urlstyle{same} % disable monospaced font for URLs
+\usepackage[margin=1in]{geometry}
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.77,0.63,0.00}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\usepackage{graphicx,grffile}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+% Set default figure placement to htbp
+\makeatletter
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+
+\title{Examining Coronavirus in Louisiana Jails}
+\author{Albert Sun and Ben Wallace}
+\date{4/19/2020}
+
+\begin{document}
+\maketitle
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{jails <-}\StringTok{ }\KeywordTok{read.csv}\NormalTok{(}\StringTok{"datafiles/Jails.finalstates.csv"}\NormalTok{)}
+\NormalTok{lajails <-}\StringTok{ }\KeywordTok{read.csv}\NormalTok{(}\StringTok{"datafiles/la_incarceration.csv"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{jails }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{summarise}\NormalTok{(}\KeywordTok{n}\NormalTok{(), }\KeywordTok{n_distinct}\NormalTok{(State_Abbrev)) }
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##   n() n_distinct(State_Abbrev)
+## 1 333                       27
+\end{verbatim}
+
+We have jail data from 334 counties from 27 states.
+
+\hypertarget{data-wrangling}{%
+\section{Data Wrangling}\label{data-wrangling}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{jails <-}\StringTok{ }\NormalTok{jails }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{filter}\NormalTok{(State }\OperatorTok{==}\StringTok{ "Louisiana"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{jails <-}\StringTok{ }\NormalTok{jails }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{County_Profile =}\NormalTok{ County_Profile }\OperatorTok{*}\StringTok{ }\DecValTok{100}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{jails <-}\StringTok{ }\NormalTok{jails }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{obs_num =} \KeywordTok{c}\NormalTok{(}\DecValTok{1}\OperatorTok{:}\DecValTok{55}\NormalTok{)) }
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{lajails}\OperatorTok{$}\NormalTok{county_name =}\StringTok{ }\KeywordTok{str_replace}\NormalTok{(lajails}\OperatorTok{$}\NormalTok{county_name, }\StringTok{" Parish"}\NormalTok{, }\StringTok{""}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{jails}\OperatorTok{$}\NormalTok{County =}\StringTok{ }\KeywordTok{as.character}\NormalTok{(jails}\OperatorTok{$}\NormalTok{County)}
+\NormalTok{jails}\OperatorTok{$}\NormalTok{CountyState =}\StringTok{ }\KeywordTok{as.character}\NormalTok{(jails}\OperatorTok{$}\NormalTok{CountyState)}
+\NormalTok{jails[}\DecValTok{27}\NormalTok{,}\DecValTok{3}\NormalTok{] <-}\StringTok{ "La Salle"}
+\NormalTok{jails[}\DecValTok{27}\NormalTok{,}\DecValTok{2}\NormalTok{] <-}\StringTok{ "La Salle, Louisiana"}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{lajails}\OperatorTok{$}\NormalTok{county_name =}\StringTok{ }\KeywordTok{as.factor}\NormalTok{(lajails}\OperatorTok{$}\NormalTok{county_name)}
+
+\NormalTok{jails <-}\StringTok{ }\KeywordTok{left_join}\NormalTok{(jails, lajails, }\DataTypeTok{by =} \KeywordTok{c}\NormalTok{(}\StringTok{"County"}\NormalTok{ =}\StringTok{ "county_name"}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Warning: Column `County`/`county_name` joining character vector and factor,
+## coercing into character vector
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{jails}\OperatorTok{$}\NormalTok{private_jail_flag =}\StringTok{ }\KeywordTok{as.factor}\NormalTok{(jails}\OperatorTok{$}\NormalTok{private_jail_flag)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{jails <-}\StringTok{ }\NormalTok{jails }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{pctblackjail =}\NormalTok{ (black_jail_pop)}\OperatorTok{/}\NormalTok{(total_jail_pop) }\OperatorTok{*}\StringTok{ }\DecValTok{100}\NormalTok{) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{pctlatinxjail =}\NormalTok{ (latinx_jail_pop)}\OperatorTok{/}\NormalTok{(total_jail_pop) }\OperatorTok{*}\StringTok{ }\DecValTok{100}\NormalTok{) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{pctwhitejail =}\NormalTok{ (white_jail_pop)}\OperatorTok{/}\NormalTok{(total_jail_pop) }\OperatorTok{*}\StringTok{ }\DecValTok{100}\NormalTok{) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{pctpretrial =}\NormalTok{ (total_jail_pretrial)}\OperatorTok{/}\NormalTok{(total_jail_pop) }\OperatorTok{*}\StringTok{ }\DecValTok{100}\NormalTok{) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{pctprison =}\NormalTok{ (total_jail_from_prison)}\OperatorTok{/}\NormalTok{(total_jail_pop) }\OperatorTok{*}\StringTok{ }\DecValTok{100}\NormalTok{) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{pctjailfromother =}\NormalTok{ (total_jail_from_other_jail)}\OperatorTok{/}\NormalTok{(total_jail_pop) }\OperatorTok{*}\StringTok{ }\DecValTok{100}\NormalTok{) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{pctcapacity =}\NormalTok{ (jail_rated_capacity)}\OperatorTok{/}\NormalTok{(total_jail_pop) }\OperatorTok{*}\StringTok{ }\DecValTok{100}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{slope-chart}{%
+\section{Slope Chart}\label{slope-chart}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{#top ten jail decreases with initial jail population >50}
+\NormalTok{topTenJails <-}\StringTok{ }\NormalTok{jails }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{arrange}\NormalTok{(Percent_Change) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{filter}\NormalTok{(State }\OperatorTok{==}\StringTok{ "Louisiana"}\NormalTok{) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{filter}\NormalTok{(PreCovid_Jail_Pop }\OperatorTok{>}\StringTok{ }\DecValTok{50}\NormalTok{) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{select}\NormalTok{(CountyState, County, Percent_Change, PreCovid_Jail_Pop, Jail_Population_Latest) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{slice}\NormalTok{(}\DecValTok{1}\OperatorTok{:}\DecValTok{10}\NormalTok{) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{arrange}\NormalTok{(}\OperatorTok{-}\NormalTok{PreCovid_Jail_Pop) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{class =} \KeywordTok{ifelse}\NormalTok{(Jail_Population_Latest}\OperatorTok{-}\NormalTok{PreCovid_Jail_Pop }\OperatorTok{>=}\StringTok{ }\DecValTok{0}\NormalTok{, }\StringTok{"red"}\NormalTok{, }\StringTok{"green"}\NormalTok{))}
+         
+\NormalTok{topTenJails}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##                   CountyState          County Percent_Change PreCovid_Jail_Pop
+## 1        Lafayette, Louisiana       Lafayette     -0.2572917               960
+## 2        Ascension, Louisiana       Ascension     -0.2457983               476
+## 3  Jefferson Davis, Louisiana Jefferson Davis     -0.2969697               165
+## 4       Washington, Louisiana      Washington     -0.2560976               164
+## 5          Jackson, Louisiana         Jackson     -0.2608696               161
+## 6        Concordia, Louisiana       Concordia     -0.2428571               140
+## 7           Vernon, Louisiana          Vernon     -0.3381295               139
+## 8            Allen, Louisiana           Allen     -0.4453782               119
+## 9          De Soto, Louisiana         De Soto     -0.3260870                92
+## 10       Catahoula, Louisiana       Catahoula     -0.6478873                71
+##    Jail_Population_Latest class
+## 1                     713 green
+## 2                     359 green
+## 3                     116 green
+## 4                     122 green
+## 5                     119 green
+## 6                     106 green
+## 7                      92 green
+## 8                      66 green
+## 9                      62 green
+## 10                     25 green
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{left_label <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\KeywordTok{paste}\NormalTok{(topTenJails}\OperatorTok{$}\NormalTok{County, topTenJails}\OperatorTok{$}\NormalTok{PreCovid_Jail_Pop, }\DataTypeTok{sep=}\StringTok{", "}\NormalTok{)[}\DecValTok{1}\OperatorTok{:}\DecValTok{3}\NormalTok{],}\KeywordTok{character}\NormalTok{(}\DecValTok{7}\NormalTok{))}
+\NormalTok{right_label <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\KeywordTok{paste}\NormalTok{(topTenJails}\OperatorTok{$}\NormalTok{County, topTenJails}\OperatorTok{$}\NormalTok{Jail_Population_Latest,}\DataTypeTok{sep=}\StringTok{", "}\NormalTok{)[}\DecValTok{1}\OperatorTok{:}\DecValTok{3}\NormalTok{],}\KeywordTok{character}\NormalTok{(}\DecValTok{7}\NormalTok{))}
+
+\KeywordTok{library}\NormalTok{(scales)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Warning: package 'scales' was built under R version 3.6.2
+\end{verbatim}
+
+\begin{verbatim}
+## 
+## Attaching package: 'scales'
+\end{verbatim}
+
+\begin{verbatim}
+## The following object is masked from 'package:viridis':
+## 
+##     viridis_pal
+\end{verbatim}
+
+\begin{verbatim}
+## The following object is masked from 'package:purrr':
+## 
+##     discard
+\end{verbatim}
+
+\begin{verbatim}
+## The following object is masked from 'package:readr':
+## 
+##     col_factor
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{theme_set}\NormalTok{(}\KeywordTok{theme_classic}\NormalTok{())}
+\NormalTok{p <-}\StringTok{ }\KeywordTok{ggplot}\NormalTok{(topTenJails) }\OperatorTok{+}\StringTok{ }
+\StringTok{  }\KeywordTok{geom_segment}\NormalTok{(}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x=}\DecValTok{1}\NormalTok{, }\DataTypeTok{xend=}\DecValTok{2}\NormalTok{, }\DataTypeTok{y=}\NormalTok{PreCovid_Jail_Pop, }\DataTypeTok{yend=}\NormalTok{Jail_Population_Latest, }\DataTypeTok{col=}\NormalTok{class), }\DataTypeTok{size=}\NormalTok{.}\DecValTok{75}\NormalTok{, }\DataTypeTok{show.legend=}\NormalTok{F) }\OperatorTok{+}\StringTok{ }
+\StringTok{  }\KeywordTok{geom_vline}\NormalTok{(}\DataTypeTok{xintercept=}\DecValTok{1}\NormalTok{, }\DataTypeTok{linetype=}\StringTok{"dashed"}\NormalTok{, }\DataTypeTok{size=}\NormalTok{.}\DecValTok{1}\NormalTok{) }\OperatorTok{+}\StringTok{ }
+\StringTok{  }\KeywordTok{geom_vline}\NormalTok{(}\DataTypeTok{xintercept=}\DecValTok{2}\NormalTok{, }\DataTypeTok{linetype=}\StringTok{"dashed"}\NormalTok{, }\DataTypeTok{size=}\NormalTok{.}\DecValTok{1}\NormalTok{) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{scale_color_manual}\NormalTok{(}\DataTypeTok{labels =} \KeywordTok{c}\NormalTok{(}\StringTok{"Up"}\NormalTok{, }\StringTok{"Down"}\NormalTok{), }
+                     \DataTypeTok{values =} \KeywordTok{c}\NormalTok{(}\StringTok{"green"}\NormalTok{=}\StringTok{"#00ba38"}\NormalTok{, }\StringTok{"red"}\NormalTok{ =}\StringTok{ "#f8766d"}\NormalTok{)) }\OperatorTok{+}\StringTok{  }\CommentTok{# color of lines}
+\StringTok{  }\KeywordTok{xlim}\NormalTok{(}\FloatTok{0.5}\NormalTok{,}\FloatTok{2.5}\NormalTok{) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{ylim}\NormalTok{(}\DecValTok{0}\NormalTok{,}\DecValTok{1100}\NormalTok{) }\OperatorTok{+}\StringTok{ }
+\StringTok{  }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{x=}\StringTok{""}\NormalTok{, }
+       \DataTypeTok{y=}\StringTok{"# People in Jail"}\NormalTok{, }
+       \DataTypeTok{title =} \StringTok{"Slope Chart: Top Ten Fractional }
+\StringTok{Population Decreases in Louisiana Jails"}\NormalTok{,}
+       \DataTypeTok{caption =} \StringTok{"Parishes Not Labelled: Washington, Jackson, }
+\StringTok{Concordia, Vernon, Allen, De Soto, Catahoula"}\NormalTok{) }\OperatorTok{+}\StringTok{ }
+\StringTok{  }\KeywordTok{theme_classic}\NormalTok{(}\DataTypeTok{base_size =} \DecValTok{16}\NormalTok{)}
+
+\NormalTok{p <-}\StringTok{ }\NormalTok{p }\OperatorTok{+}\StringTok{ }\KeywordTok{geom_text}\NormalTok{(}\DataTypeTok{label=}\NormalTok{left_label, }\DataTypeTok{y=}\NormalTok{topTenJails}\OperatorTok{$}\NormalTok{PreCovid_Jail_Pop}\OperatorTok{+}\DecValTok{10}\NormalTok{, }\DataTypeTok{x=}\KeywordTok{rep}\NormalTok{(}\DecValTok{1}\NormalTok{, }\KeywordTok{NROW}\NormalTok{(topTenJails)), }\DataTypeTok{hjust=}\FloatTok{1.1}\NormalTok{, }\DataTypeTok{size=}\FloatTok{3.5}\NormalTok{)}
+\NormalTok{p <-}\StringTok{ }\NormalTok{p }\OperatorTok{+}\StringTok{ }\KeywordTok{geom_text}\NormalTok{(}\DataTypeTok{label=}\NormalTok{right_label, }\DataTypeTok{y=}\NormalTok{topTenJails}\OperatorTok{$}\NormalTok{Jail_Population_Latest, }\DataTypeTok{x=}\KeywordTok{rep}\NormalTok{(}\DecValTok{2}\NormalTok{, }\KeywordTok{NROW}\NormalTok{(topTenJails)), }\DataTypeTok{hjust=}\OperatorTok{-}\FloatTok{0.1}\NormalTok{, }\DataTypeTok{size=}\FloatTok{3.5}\NormalTok{)}
+
+
+\NormalTok{p <-}\StringTok{ }\NormalTok{p }\OperatorTok{+}\StringTok{ }\KeywordTok{geom_text}\NormalTok{(}\DataTypeTok{label=}\StringTok{"2/29/2020"}\NormalTok{, }\DataTypeTok{x=}\DecValTok{1}\NormalTok{, }\DataTypeTok{y=}\FloatTok{1.12}\OperatorTok{*}\NormalTok{(}\KeywordTok{max}\NormalTok{(topTenJails}\OperatorTok{$}\NormalTok{PreCovid_Jail_Pop, topTenJails}\OperatorTok{$}\NormalTok{Jail_Population_Latest)), }\DataTypeTok{hjust=}\DecValTok{1}\NormalTok{, }\DataTypeTok{size=}\FloatTok{5.5}\NormalTok{)  }\CommentTok{# title}
+\NormalTok{p <-}\StringTok{ }\NormalTok{p }\OperatorTok{+}\StringTok{ }\KeywordTok{geom_text}\NormalTok{(}\DataTypeTok{label=}\StringTok{"4/9/2020"}\NormalTok{, }\DataTypeTok{x=}\DecValTok{2}\NormalTok{, }\DataTypeTok{y=}\FloatTok{1.12}\OperatorTok{*}\NormalTok{(}\KeywordTok{max}\NormalTok{(topTenJails}\OperatorTok{$}\NormalTok{PreCovid_Jail_Pop, topTenJails}\OperatorTok{$}\NormalTok{Jail_Population_Latest)), }\DataTypeTok{hjust=}\OperatorTok{-}\FloatTok{0.1}\NormalTok{, }\DataTypeTok{size=}\FloatTok{5.5}\NormalTok{)  }\CommentTok{# title}
+
+
+\NormalTok{p <-}\StringTok{ }\NormalTok{p }\OperatorTok{+}\StringTok{ }\KeywordTok{theme}\NormalTok{(}\DataTypeTok{panel.background =} \KeywordTok{element_blank}\NormalTok{(), }
+           \DataTypeTok{panel.grid =} \KeywordTok{element_blank}\NormalTok{(),}
+           \DataTypeTok{axis.ticks =} \KeywordTok{element_blank}\NormalTok{(),}
+           \DataTypeTok{axis.text.x =} \KeywordTok{element_blank}\NormalTok{(),}
+           \DataTypeTok{panel.border =} \KeywordTok{element_blank}\NormalTok{(),}
+           \DataTypeTok{plot.margin =} \KeywordTok{unit}\NormalTok{(}\KeywordTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{,}\DecValTok{2}\NormalTok{,}\DecValTok{1}\NormalTok{,}\DecValTok{2}\NormalTok{), }\StringTok{"cm"}\NormalTok{))}
+
+\NormalTok{p}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{LACovid_files/figure-latex/slope-chart-1.pdf}
+
+\#EDA
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{blackpop <-}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"P005004"}\NormalTok{)}
+
+\NormalTok{blackgeo <-}\StringTok{ }\KeywordTok{get_decennial}\NormalTok{(}\DataTypeTok{geography =} \StringTok{"county"}\NormalTok{, }\DataTypeTok{variables =}\NormalTok{ blackpop, }\DataTypeTok{year =} \DecValTok{2010}\NormalTok{, }\DataTypeTok{summary_var =} \StringTok{"P001001"}\NormalTok{, }\DataTypeTok{geometry =} \OtherTok{TRUE}\NormalTok{, }\DataTypeTok{state =} \StringTok{"LA"}\NormalTok{) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{pctblack =} \DecValTok{100} \OperatorTok{*}\StringTok{ }\NormalTok{(value }\OperatorTok{/}\StringTok{ }\NormalTok{summary_value))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Getting data from the 2010 decennial Census
+\end{verbatim}
+
+\begin{verbatim}
+## Downloading feature geometry from the Census website.  To cache shapefiles for use in future sessions, set `options(tigris_use_cache = TRUE)`.
+\end{verbatim}
+
+\begin{verbatim}
+##   |                                                                              |                                                                      |   0%  |                                                                              |=                                                                     |   1%  |                                                                              |=                                                                     |   2%  |                                                                              |==                                                                    |   2%  |                                                                              |==                                                                    |   3%  |                                                                              |===                                                                   |   4%  |                                                                              |===                                                                   |   5%  |                                                                              |====                                                                  |   5%  |                                                                              |====                                                                  |   6%  |                                                                              |=====                                                                 |   7%  |                                                                              |=====                                                                 |   8%  |                                                                              |======                                                                |   8%  |                                                                              |======                                                                |   9%  |                                                                              |=======                                                               |   9%  |                                                                              |=======                                                               |  10%  |                                                                              |=======                                                               |  11%  |                                                                              |========                                                              |  11%  |                                                                              |========                                                              |  12%  |                                                                              |=========                                                             |  12%  |                                                                              |=========                                                             |  13%  |                                                                              |=========                                                             |  14%  |                                                                              |==========                                                            |  14%  |                                                                              |==========                                                            |  15%  |                                                                              |===========                                                           |  15%  |                                                                              |===========                                                           |  16%  |                                                                              |============                                                          |  16%  |                                                                              |============                                                          |  17%  |                                                                              |============                                                          |  18%  |                                                                              |=============                                                         |  18%  |                                                                              |=============                                                         |  19%  |                                                                              |==============                                                        |  19%  |                                                                              |==============                                                        |  20%  |                                                                              |==============                                                        |  21%  |                                                                              |===============                                                       |  21%  |                                                                              |===============                                                       |  22%  |                                                                              |================                                                      |  22%  |                                                                              |================                                                      |  23%  |                                                                              |=================                                                     |  24%  |                                                                              |=================                                                     |  25%  |                                                                              |==================                                                    |  25%  |                                                                              |==================                                                    |  26%  |                                                                              |===================                                                   |  27%  |                                                                              |===================                                                   |  28%  |                                                                              |====================                                                  |  28%  |                                                                              |====================                                                  |  29%  |                                                                              |=====================                                                 |  30%  |                                                                              |=====================                                                 |  31%  |                                                                              |======================                                                |  31%  |                                                                              |======================                                                |  32%  |                                                                              |=======================                                               |  32%  |                                                                              |=======================                                               |  33%  |                                                                              |========================                                              |  34%  |                                                                              |========================                                              |  35%  |                                                                              |=========================                                             |  35%  |                                                                              |=========================                                             |  36%  |                                                                              |==========================                                            |  37%  |                                                                              |==========================                                            |  38%  |                                                                              |===========================                                           |  38%  |                                                                              |===========================                                           |  39%  |                                                                              |============================                                          |  40%  |                                                                              |============================                                          |  41%  |                                                                              |=============================                                         |  41%  |                                                                              |=============================                                         |  42%  |                                                                              |==============================                                        |  42%  |                                                                              |==============================                                        |  43%  |                                                                              |===============================                                       |  44%  |                                                                              |===============================                                       |  45%  |                                                                              |================================                                      |  45%  |                                                                              |================================                                      |  46%  |                                                                              |=================================                                     |  47%  |                                                                              |=================================                                     |  48%  |                                                                              |==================================                                    |  48%  |                                                                              |==================================                                    |  49%  |                                                                              |===================================                                   |  49%  |                                                                              |===================================                                   |  50%  |                                                                              |===================================                                   |  51%  |                                                                              |====================================                                  |  51%  |                                                                              |====================================                                  |  52%  |                                                                              |=====================================                                 |  52%  |                                                                              |=====================================                                 |  53%  |                                                                              |=====================================                                 |  54%  |                                                                              |======================================                                |  54%  |                                                                              |======================================                                |  55%  |                                                                              |=======================================                               |  55%  |                                                                              |=======================================                               |  56%  |                                                                              |========================================                              |  56%  |                                                                              |========================================                              |  57%  |                                                                              |=========================================                             |  58%  |                                                                              |=========================================                             |  59%  |                                                                              |==========================================                            |  59%  |                                                                              |==========================================                            |  60%  |                                                                              |===========================================                           |  61%  |                                                                              |===========================================                           |  62%  |                                                                              |============================================                          |  62%  |                                                                              |============================================                          |  63%  |                                                                              |=============================================                         |  64%  |                                                                              |=============================================                         |  65%  |                                                                              |==============================================                        |  65%  |                                                                              |==============================================                        |  66%  |                                                                              |===============================================                       |  67%  |                                                                              |===============================================                       |  68%  |                                                                              |================================================                      |  68%  |                                                                              |================================================                      |  69%  |                                                                              |=================================================                     |  70%  |                                                                              |=================================================                     |  71%  |                                                                              |==================================================                    |  71%  |                                                                              |==================================================                    |  72%  |                                                                              |===================================================                   |  72%  |                                                                              |===================================================                   |  73%  |                                                                              |====================================================                  |  74%  |                                                                              |====================================================                  |  75%  |                                                                              |=====================================================                 |  75%  |                                                                              |=====================================================                 |  76%  |                                                                              |======================================================                |  77%  |                                                                              |======================================================                |  78%  |                                                                              |=======================================================               |  78%  |                                                                              |=======================================================               |  79%  |                                                                              |========================================================              |  80%  |                                                                              |========================================================              |  81%  |                                                                              |=========================================================             |  81%  |                                                                              |=========================================================             |  82%  |                                                                              |==========================================================            |  82%  |                                                                              |==========================================================            |  83%  |                                                                              |===========================================================           |  84%  |                                                                              |===========================================================           |  85%  |                                                                              |============================================================          |  85%  |                                                                              |============================================================          |  86%  |                                                                              |=============================================================         |  87%  |                                                                              |=============================================================         |  88%  |                                                                              |==============================================================        |  88%  |                                                                              |==============================================================        |  89%  |                                                                              |===============================================================       |  89%  |                                                                              |===============================================================       |  90%  |                                                                              |===============================================================       |  91%  |                                                                              |================================================================      |  91%  |                                                                              |================================================================      |  92%  |                                                                              |=================================================================     |  92%  |                                                                              |=================================================================     |  93%  |                                                                              |=================================================================     |  94%  |                                                                              |==================================================================    |  94%  |                                                                              |==================================================================    |  95%  |                                                                              |===================================================================   |  95%  |                                                                              |===================================================================   |  96%  |                                                                              |====================================================================  |  96%  |                                                                              |====================================================================  |  97%  |                                                                              |===================================================================== |  98%  |                                                                              |===================================================================== |  99%  |                                                                              |======================================================================|  99%  |                                                                              |======================================================================| 100%
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{jails}\OperatorTok{$}\NormalTok{CountyState =}\StringTok{ }\KeywordTok{as.character}\NormalTok{(jails}\OperatorTok{$}\NormalTok{CountyState)}
+\NormalTok{blackgeo}\OperatorTok{$}\NormalTok{NAME =}\StringTok{ }\KeywordTok{str_replace}\NormalTok{(blackgeo}\OperatorTok{$}\NormalTok{NAME, }\StringTok{" Parish"}\NormalTok{, }\StringTok{""}\NormalTok{)}
+
+\NormalTok{jails <-}\StringTok{ }\KeywordTok{left_join}\NormalTok{(jails, blackgeo, }\DataTypeTok{by =} \KeywordTok{c}\NormalTok{(}\StringTok{"CountyState"}\NormalTok{ =}\StringTok{ "NAME"}\NormalTok{))}
+
+\NormalTok{stategeo <-}\StringTok{ }\KeywordTok{st_as_sf}\NormalTok{(}\KeywordTok{map}\NormalTok{(}\StringTok{"state"}\NormalTok{, }\DataTypeTok{plot =} \OtherTok{FALSE}\NormalTok{, }\DataTypeTok{fill =} \OtherTok{TRUE}\NormalTok{, }\DataTypeTok{state =} \StringTok{"LA"}\NormalTok{)) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{filter}\NormalTok{(ID }\OperatorTok{==}\StringTok{ "louisiana"}\NormalTok{) }
+
+\NormalTok{jails}\OperatorTok{$}\NormalTok{geom =}\StringTok{ }\NormalTok{jails}\OperatorTok{$}\NormalTok{geometry}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{ggplot}\NormalTok{() }\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_sf}\NormalTok{(}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{geometry =}\NormalTok{ geom, }\DataTypeTok{fill =}\NormalTok{ pctwhitejail, }\DataTypeTok{color =}\NormalTok{ pctwhitejail), }\DataTypeTok{data =}\NormalTok{ jails) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{title =} \StringTok{"Percent of Prison Population White"}\NormalTok{,}
+       \DataTypeTok{fill =} \StringTok{"Percent White"}\NormalTok{,}
+       \DataTypeTok{color =} \StringTok{"Percent White"}\NormalTok{,}
+       \DataTypeTok{caption =} \StringTok{"Parishes excluded:"}\NormalTok{) }\OperatorTok{+}\StringTok{ }
+\StringTok{  }\KeywordTok{scale_fill_viridis}\NormalTok{(}\DataTypeTok{option =} \StringTok{"viridis"}\NormalTok{) }\OperatorTok{+}\StringTok{ }
+\StringTok{  }\KeywordTok{scale_color_viridis}\NormalTok{(}\DataTypeTok{option =} \StringTok{"viridis"}\NormalTok{) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_sf}\NormalTok{(}\DataTypeTok{data =}\NormalTok{ stategeo, }\DataTypeTok{fill =} \OtherTok{NA}\NormalTok{) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{theme}\NormalTok{(}\DataTypeTok{panel.background =} \KeywordTok{element_rect}\NormalTok{(}\DataTypeTok{fill =} \StringTok{"white"}\NormalTok{),}
+        \DataTypeTok{axis.text.y =} \KeywordTok{element_blank}\NormalTok{(),}
+        \DataTypeTok{axis.text.x =} \KeywordTok{element_blank}\NormalTok{(),}
+        \DataTypeTok{axis.ticks =} \KeywordTok{element_blank}\NormalTok{()) }
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{LACovid_files/figure-latex/Percent black-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{jails }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{summarise}\NormalTok{(}\DataTypeTok{mean =} \KeywordTok{mean}\NormalTok{(pctblack, }\DataTypeTok{na.rm =} \OtherTok{TRUE}\NormalTok{),}
+          \DataTypeTok{median =} \KeywordTok{median}\NormalTok{(pctblack, }\DataTypeTok{na.rm =} \OtherTok{TRUE}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##       mean   median
+## 1 31.18377 30.87051
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{jails }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{summarise}\NormalTok{(}\DataTypeTok{mean =} \KeywordTok{mean}\NormalTok{(pctblackjail, }\DataTypeTok{na.rm =} \OtherTok{TRUE}\NormalTok{),}
+            \DataTypeTok{median =} \KeywordTok{median}\NormalTok{(pctblackjail, }\DataTypeTok{na.rm =} \OtherTok{TRUE}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##       mean   median
+## 1 57.13006 57.82609
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{ggplot}\NormalTok{() }\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_sf}\NormalTok{(}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{geometry =}\NormalTok{ geom, }\DataTypeTok{fill =}\NormalTok{ County_Profile, }\DataTypeTok{color =}\NormalTok{ County_Profile), }\DataTypeTok{data =}\NormalTok{ jails) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{title =} \StringTok{"Percent Won by Donald Trump (2016)"}\NormalTok{,}
+       \DataTypeTok{fill =} \StringTok{"% Trump"}\NormalTok{,}
+       \DataTypeTok{color =} \StringTok{"% Trump"}\NormalTok{,}
+       \DataTypeTok{caption =} \StringTok{"Parishes excluded:"}\NormalTok{) }\OperatorTok{+}\StringTok{ }
+\StringTok{  }\KeywordTok{scale_fill_viridis}\NormalTok{(}\DataTypeTok{option =} \StringTok{"viridis"}\NormalTok{) }\OperatorTok{+}\StringTok{ }
+\StringTok{  }\KeywordTok{scale_color_viridis}\NormalTok{(}\DataTypeTok{option =} \StringTok{"viridis"}\NormalTok{) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_sf}\NormalTok{(}\DataTypeTok{data =}\NormalTok{ stategeo, }\DataTypeTok{fill =} \OtherTok{NA}\NormalTok{) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{theme}\NormalTok{(}\DataTypeTok{panel.background =} \KeywordTok{element_rect}\NormalTok{(}\DataTypeTok{fill =} \StringTok{"white"}\NormalTok{),}
+        \DataTypeTok{axis.text.y =} \KeywordTok{element_blank}\NormalTok{(),}
+        \DataTypeTok{axis.text.x =} \KeywordTok{element_blank}\NormalTok{(),}
+        \DataTypeTok{axis.ticks =} \KeywordTok{element_blank}\NormalTok{()) }
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{LACovid_files/figure-latex/unnamed-chunk-2-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{jails }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{summarise}\NormalTok{(}\DataTypeTok{mean =} \KeywordTok{mean}\NormalTok{(County_Profile),}
+            \DataTypeTok{median =} \KeywordTok{median}\NormalTok{(County_Profile))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##       mean   median
+## 1 65.44126 66.80412
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{jails}\OperatorTok{$}\StringTok{`}\DataTypeTok{Private Jail}\StringTok{`}\NormalTok{ =}\StringTok{ }\NormalTok{jails}\OperatorTok{$}\NormalTok{private_jail_flag}
+
+\NormalTok{jails}\OperatorTok{$}\StringTok{`}\DataTypeTok{Private Jail}\StringTok{`}\NormalTok{ =}\StringTok{ }\KeywordTok{recode_factor}\NormalTok{(jails}\OperatorTok{$}\StringTok{`}\DataTypeTok{Private Jail}\StringTok{`}\NormalTok{, }\StringTok{"0"}\NormalTok{ =}\StringTok{ "No"}\NormalTok{, }\StringTok{"1"}\NormalTok{ =}\StringTok{ "Yes"}\NormalTok{)}
+
+\NormalTok{privatejail <-}\StringTok{ }\KeywordTok{ggplot}\NormalTok{() }\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_sf}\NormalTok{(}\DataTypeTok{data =}\NormalTok{ stategeo, }\DataTypeTok{fill =} \OtherTok{NA}\NormalTok{) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_sf}\NormalTok{(}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{geometry =}\NormalTok{ geom, }\DataTypeTok{fill =} \StringTok{`}\DataTypeTok{Private Jail}\StringTok{`}\NormalTok{), }\DataTypeTok{data =}\NormalTok{ jails) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{scale_fill_manual}\NormalTok{(}\DataTypeTok{values =} \KeywordTok{c}\NormalTok{(}\StringTok{"skyblue"}\NormalTok{, }\StringTok{"darkred"}\NormalTok{)) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{theme_classic}\NormalTok{(}\DataTypeTok{base_size =} \DecValTok{13}\NormalTok{) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{title =} \StringTok{"Private Jails Concentrated }
+\StringTok{in Northeastern Louisiana"}\NormalTok{,}
+       \DataTypeTok{caption =} \StringTok{"White parishes have unavailable data"}\NormalTok{) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{theme}\NormalTok{(}\DataTypeTok{panel.background =} \KeywordTok{element_rect}\NormalTok{(}\DataTypeTok{fill =} \StringTok{"white"}\NormalTok{),}
+        \DataTypeTok{axis.text.y =} \KeywordTok{element_blank}\NormalTok{(),}
+        \DataTypeTok{axis.text.x =} \KeywordTok{element_blank}\NormalTok{(),}
+        \DataTypeTok{axis.ticks =} \KeywordTok{element_blank}\NormalTok{(),}
+        \DataTypeTok{panel.border =} \KeywordTok{element_blank}\NormalTok{())}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{### Mapping Jurisdictions}
+
+\NormalTok{jails}\OperatorTok{$}\NormalTok{Jurisdiction_Profile =}\StringTok{ }\KeywordTok{recode_factor}\NormalTok{(jails}\OperatorTok{$}\NormalTok{Jurisdiction_Profile, }\StringTok{"R"}\NormalTok{ =}\StringTok{ "Conservative"}\NormalTok{, }\StringTok{"M"}\NormalTok{ =}\StringTok{ "Moderate"}\NormalTok{, }\StringTok{"B"}\NormalTok{ =}\StringTok{ "Liberal"}\NormalTok{)}
+
+\KeywordTok{ggplot}\NormalTok{() }\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_sf}\NormalTok{(}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{geometry =}\NormalTok{ geom, }\DataTypeTok{fill =}\NormalTok{ Jurisdiction_Profile), }\DataTypeTok{data =}\NormalTok{ jails) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{title =} \StringTok{"Jurisdiction Profile"}\NormalTok{,}
+       \DataTypeTok{fill =} \StringTok{"Jurisdiction Profile"}\NormalTok{) }\OperatorTok{+}\StringTok{ }
+\StringTok{  }\KeywordTok{geom_sf}\NormalTok{(}\DataTypeTok{data =}\NormalTok{ stategeo, }\DataTypeTok{fill =} \OtherTok{NA}\NormalTok{) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{scale_fill_manual}\NormalTok{(}\DataTypeTok{values =} \KeywordTok{c}\NormalTok{(}\StringTok{"darkred"}\NormalTok{, }\StringTok{"forestgreen"}\NormalTok{, }\StringTok{"blue2"}\NormalTok{)) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{theme}\NormalTok{(}\DataTypeTok{panel.background =} \KeywordTok{element_rect}\NormalTok{(}\DataTypeTok{fill =} \StringTok{"white"}\NormalTok{),}
+        \DataTypeTok{axis.text.y =} \KeywordTok{element_blank}\NormalTok{(),}
+        \DataTypeTok{axis.text.x =} \KeywordTok{element_blank}\NormalTok{(),}
+        \DataTypeTok{axis.ticks =} \KeywordTok{element_blank}\NormalTok{()) }
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{LACovid_files/figure-latex/Judicial profiles-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{ggplot}\NormalTok{() }\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_sf}\NormalTok{(}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{geometry =}\NormalTok{ geom, }\DataTypeTok{fill =}\NormalTok{ Percent_Change, }\DataTypeTok{color =}\NormalTok{ Percent_Change), }\DataTypeTok{data =}\NormalTok{ jails) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{title =} \StringTok{"Percent Change by Parish"}\NormalTok{,}
+       \DataTypeTok{fill =} \StringTok{"Percent Change"}\NormalTok{,}
+       \DataTypeTok{color =} \StringTok{"Percent Change"}\NormalTok{,}
+       \DataTypeTok{caption =} \StringTok{"Parishes excluded:"}\NormalTok{) }\OperatorTok{+}\StringTok{ }
+\StringTok{  }\KeywordTok{scale_fill_viridis}\NormalTok{(}\DataTypeTok{option =} \StringTok{"viridis"}\NormalTok{) }\OperatorTok{+}\StringTok{ }
+\StringTok{  }\KeywordTok{scale_color_viridis}\NormalTok{(}\DataTypeTok{option =} \StringTok{"viridis"}\NormalTok{) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_sf}\NormalTok{(}\DataTypeTok{data =}\NormalTok{ stategeo, }\DataTypeTok{fill =} \OtherTok{NA}\NormalTok{) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{theme}\NormalTok{(}\DataTypeTok{panel.background =} \KeywordTok{element_rect}\NormalTok{(}\DataTypeTok{fill =} \StringTok{"white"}\NormalTok{),}
+        \DataTypeTok{axis.text.y =} \KeywordTok{element_blank}\NormalTok{(),}
+        \DataTypeTok{axis.text.x =} \KeywordTok{element_blank}\NormalTok{(),}
+        \DataTypeTok{axis.ticks =} \KeywordTok{element_blank}\NormalTok{()) }
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{LACovid_files/figure-latex/Percent change-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{ggplot}\NormalTok{() }\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_sf}\NormalTok{(}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{geometry =}\NormalTok{ geom, }\DataTypeTok{fill =}\NormalTok{ pctblackjail, }\DataTypeTok{color =}\NormalTok{ pctblackjail), }\DataTypeTok{data =}\NormalTok{ jails) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{title =} \StringTok{"Percent of Prison Population Black"}\NormalTok{,}
+       \DataTypeTok{fill =} \StringTok{"Percent Black"}\NormalTok{,}
+       \DataTypeTok{color =} \StringTok{"Percent Black"}\NormalTok{,}
+       \DataTypeTok{caption =} \StringTok{"Parishes excluded:"}\NormalTok{) }\OperatorTok{+}\StringTok{ }
+\StringTok{  }\KeywordTok{scale_fill_viridis}\NormalTok{(}\DataTypeTok{option =} \StringTok{"viridis"}\NormalTok{) }\OperatorTok{+}\StringTok{ }
+\StringTok{  }\KeywordTok{scale_color_viridis}\NormalTok{(}\DataTypeTok{option =} \StringTok{"viridis"}\NormalTok{) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_sf}\NormalTok{(}\DataTypeTok{data =}\NormalTok{ stategeo, }\DataTypeTok{fill =} \OtherTok{NA}\NormalTok{) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{theme}\NormalTok{(}\DataTypeTok{panel.background =} \KeywordTok{element_rect}\NormalTok{(}\DataTypeTok{fill =} \StringTok{"white"}\NormalTok{),}
+        \DataTypeTok{axis.text.y =} \KeywordTok{element_blank}\NormalTok{(),}
+        \DataTypeTok{axis.text.x =} \KeywordTok{element_blank}\NormalTok{(),}
+        \DataTypeTok{axis.ticks =} \KeywordTok{element_blank}\NormalTok{()) }
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{LACovid_files/figure-latex/unnamed-chunk-5-1.pdf}
+
+\hypertarget{univariate-eda}{%
+\subsection{Univariate EDA}\label{univariate-eda}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{jails <-}\StringTok{ }\NormalTok{jails }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{ab_avg =}\NormalTok{ Percent_Change }\OperatorTok{<}\StringTok{ }\FloatTok{-.2}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##       mean median
+## 1 317.7455     59
+\end{verbatim}
+
+\begin{verbatim}
+##       mean median
+## 1 12.18182      2
+\end{verbatim}
+
+\includegraphics{LACovid_files/figure-latex/unnamed-chunk-6-1.pdf}
+\includegraphics{LACovid_files/figure-latex/unnamed-chunk-6-2.pdf}
+\includegraphics{LACovid_files/figure-latex/unnamed-chunk-6-3.pdf}
+\includegraphics{LACovid_files/figure-latex/unnamed-chunk-6-4.pdf}
+\includegraphics{LACovid_files/figure-latex/unnamed-chunk-6-5.pdf}
+
+\hypertarget{bivariate-eda}{%
+\section{Bivariate EDA}\label{bivariate-eda}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{p14 }
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{LACovid_files/figure-latex/unnamed-chunk-7-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{p15  }
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{LACovid_files/figure-latex/unnamed-chunk-7-2.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{p16}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{LACovid_files/figure-latex/unnamed-chunk-7-3.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{p17 }\OperatorTok{|}\StringTok{ }\NormalTok{p18}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{LACovid_files/figure-latex/unnamed-chunk-7-4.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{p19 }\OperatorTok{/}\StringTok{ }\NormalTok{p20 }\OperatorTok{/}\StringTok{ }\NormalTok{p21}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{LACovid_files/figure-latex/unnamed-chunk-7-5.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{p21 }\OperatorTok{|}\StringTok{ }\NormalTok{p22 }\OperatorTok{|}\StringTok{ }\NormalTok{p23}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{LACovid_files/figure-latex/unnamed-chunk-7-6.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{p24}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{LACovid_files/figure-latex/unnamed-chunk-7-7.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{p25}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{LACovid_files/figure-latex/unnamed-chunk-7-8.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{jails <-}\StringTok{ }\NormalTok{jails }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{rename}\NormalTok{(}\StringTok{`}\DataTypeTok{Above Average Decrease in Prisoners}\StringTok{`}\NormalTok{ =}\StringTok{ }\NormalTok{ab_avg)}
+
+\NormalTok{jails}\OperatorTok{$}\StringTok{`}\DataTypeTok{Above Average Decrease in Prisoners}\StringTok{`}\NormalTok{ =}\StringTok{ }\KeywordTok{as.factor}\NormalTok{(jails}\OperatorTok{$}\StringTok{`}\DataTypeTok{Above Average Decrease in Prisoners}\StringTok{`}\NormalTok{)}
+
+\NormalTok{jails}\OperatorTok{$}\StringTok{`}\DataTypeTok{Above Average Decrease in Prisoners}\StringTok{`}\NormalTok{=}\StringTok{ }\KeywordTok{recode}\NormalTok{(jails}\OperatorTok{$}\StringTok{`}\DataTypeTok{Above Average Decrease in Prisoners}\StringTok{`}\NormalTok{, }\StringTok{"TRUE"}\NormalTok{=}\StringTok{ "Yes"}\NormalTok{, }\StringTok{"FALSE"}\NormalTok{ =}\StringTok{ "No"}\NormalTok{)}
+
+\NormalTok{jurisdiction <-}\StringTok{ }\KeywordTok{ggplot}\NormalTok{(}\DataTypeTok{data =}\NormalTok{ jails) }\OperatorTok{+}
+\KeywordTok{geom_bar}\NormalTok{(}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ Jurisdiction_Profile, }\DataTypeTok{fill =} \StringTok{`}\DataTypeTok{Above Average Decrease in Prisoners}\StringTok{`}\NormalTok{), }\DataTypeTok{position =} \StringTok{"fill"}\NormalTok{, }\DataTypeTok{color =} \StringTok{"black"}\NormalTok{) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{scale_fill_brewer}\NormalTok{(}\DataTypeTok{type =} \StringTok{"seq"}\NormalTok{, }\DataTypeTok{palette =} \StringTok{"Greens"}\NormalTok{) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{scale_x_discrete}\NormalTok{(}\DataTypeTok{limits =} \KeywordTok{c}\NormalTok{(}\StringTok{"Liberal"}\NormalTok{, }\StringTok{"Moderate"}\NormalTok{, }\StringTok{"Conservative"}\NormalTok{)) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{theme}\NormalTok{(}\DataTypeTok{panel.background =} \KeywordTok{element_rect}\NormalTok{(}\DataTypeTok{fill =} \StringTok{"white"}\NormalTok{)) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{x =} \StringTok{"Polical Leaning of Judicial System"}\NormalTok{,}
+       \DataTypeTok{y =} \StringTok{"Relative Frequency"}\NormalTok{,}
+       \DataTypeTok{fill =} \StringTok{"Above Average}
+\StringTok{Decrease"}\NormalTok{,}
+       \DataTypeTok{title =} \StringTok{"Liberal Jurisdictions}
+\StringTok{Release Fewer People from Jail"}\NormalTok{,}
+       \DataTypeTok{caption =} \StringTok{"source: uslaw.org"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{private <-}\StringTok{ }\NormalTok{jails }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{group_by}\NormalTok{(private_jail_flag, }\StringTok{`}\DataTypeTok{Above Average Decrease in Prisoners}\StringTok{`}\NormalTok{) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{count}\NormalTok{()}
+
+\NormalTok{privateyes <-}\StringTok{ }\NormalTok{private }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{filter}\NormalTok{(private_jail_flag }\OperatorTok{==}\StringTok{ }\DecValTok{1}\NormalTok{)}
+
+\NormalTok{privateno <-}\StringTok{ }\NormalTok{private }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{filter}\NormalTok{(private_jail_flag }\OperatorTok{==}\StringTok{ }\DecValTok{0}\NormalTok{)}
+
+\NormalTok{privateyes <-}\StringTok{ }\NormalTok{privateyes }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{rename}\NormalTok{(}\DataTypeTok{Number =}\NormalTok{ n)}
+
+\NormalTok{privateno <-}\StringTok{ }\NormalTok{privateno  }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{rename}\NormalTok{(}\DataTypeTok{Number =}\NormalTok{ n)}
+
+
+
+\NormalTok{privateplot <-}\StringTok{ }\KeywordTok{ggplot}\NormalTok{(}\DataTypeTok{data =}\NormalTok{ privateyes, }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =} \StringTok{""}\NormalTok{, }\DataTypeTok{y =}\NormalTok{ Number, }\DataTypeTok{fill =} \StringTok{`}\DataTypeTok{Above Average Decrease in Prisoners}\StringTok{`}\NormalTok{)) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_bar}\NormalTok{(}\DataTypeTok{width =} \DecValTok{1}\NormalTok{, }\DataTypeTok{stat =} \StringTok{"identity"}\NormalTok{, }\DataTypeTok{color =} \StringTok{"white"}\NormalTok{) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{coord_polar}\NormalTok{(}\StringTok{"y"}\NormalTok{, }\DataTypeTok{start =} \DecValTok{0}\NormalTok{) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{theme_classic}\NormalTok{(}\DataTypeTok{base_size =} \DecValTok{13}\NormalTok{) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{scale_fill_brewer}\NormalTok{(}\DataTypeTok{type =} \StringTok{"seq"}\NormalTok{, }\DataTypeTok{palette =} \StringTok{"Greens"}\NormalTok{) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{title =} \StringTok{"Private Jails Tend to Release More People}
+\StringTok{From Jail"}\NormalTok{,}
+  \DataTypeTok{subtitle =} \StringTok{"Private Jails"}\NormalTok{) }\OperatorTok{+}
+\StringTok{   }\KeywordTok{theme}\NormalTok{(}\DataTypeTok{panel.background =} \KeywordTok{element_rect}\NormalTok{(}\DataTypeTok{fill =} \StringTok{"white"}\NormalTok{),}
+        \DataTypeTok{axis.text.y =} \KeywordTok{element_blank}\NormalTok{(),}
+        \DataTypeTok{axis.text.x =} \KeywordTok{element_blank}\NormalTok{(),}
+        \DataTypeTok{axis.ticks =} \KeywordTok{element_blank}\NormalTok{(),}
+        \DataTypeTok{axis.title.x =} \KeywordTok{element_blank}\NormalTok{(),}
+        \DataTypeTok{axis.title.y =} \KeywordTok{element_blank}\NormalTok{(),}
+        \DataTypeTok{legend.position =} \StringTok{"none"}\NormalTok{,}
+        \DataTypeTok{axis.line =} \KeywordTok{element_blank}\NormalTok{())}
+
+\NormalTok{publicplot <-}\StringTok{ }\KeywordTok{ggplot}\NormalTok{(}\DataTypeTok{data =}\NormalTok{ privateno, }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =} \StringTok{""}\NormalTok{, }\DataTypeTok{y =}\NormalTok{ Number, }\DataTypeTok{fill =} \StringTok{`}\DataTypeTok{Above Average Decrease in Prisoners}\StringTok{`}\NormalTok{)) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_bar}\NormalTok{(}\DataTypeTok{width =} \DecValTok{1}\NormalTok{, }\DataTypeTok{stat =} \StringTok{"identity"}\NormalTok{, }\DataTypeTok{color =} \StringTok{"white"}\NormalTok{) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{coord_polar}\NormalTok{(}\StringTok{"y"}\NormalTok{, }\DataTypeTok{start =} \DecValTok{0}\NormalTok{) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{theme_classic}\NormalTok{(}\DataTypeTok{base_line_size =} \DecValTok{13}\NormalTok{) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{scale_fill_brewer}\NormalTok{(}\DataTypeTok{type =} \StringTok{"seq"}\NormalTok{, }\DataTypeTok{palette =} \StringTok{"Greens"}\NormalTok{) }\OperatorTok{+}
+\KeywordTok{labs}\NormalTok{(}\DataTypeTok{fill =} \StringTok{"Above Average}
+\StringTok{Decrease"}\NormalTok{,}
+\DataTypeTok{subtitle =} \StringTok{"Public Jails"}\NormalTok{) }\OperatorTok{+}
+\StringTok{    }\KeywordTok{theme}\NormalTok{(}\DataTypeTok{panel.background =} \KeywordTok{element_rect}\NormalTok{(}\DataTypeTok{fill =} \StringTok{"white"}\NormalTok{),}
+        \DataTypeTok{axis.text.y =} \KeywordTok{element_blank}\NormalTok{(),}
+        \DataTypeTok{axis.text.x =} \KeywordTok{element_blank}\NormalTok{(),}
+        \DataTypeTok{axis.ticks =} \KeywordTok{element_blank}\NormalTok{(),}
+        \DataTypeTok{axis.title.x =} \KeywordTok{element_blank}\NormalTok{(),}
+        \DataTypeTok{axis.title.y =} \KeywordTok{element_blank}\NormalTok{(),}
+        \DataTypeTok{axis.line =} \KeywordTok{element_blank}\NormalTok{())}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{model-fitting}{%
+\section{Model Fitting}\label{model-fitting}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{model <-}\StringTok{ }\KeywordTok{glm}\NormalTok{(}\StringTok{`}\DataTypeTok{Above Average Decrease in Prisoners}\StringTok{`} \OperatorTok{~}\StringTok{ }\NormalTok{County_Profile }\OperatorTok{+}
+\StringTok{                }\NormalTok{Jurisdiction_Profile }\OperatorTok{+}\StringTok{ }\NormalTok{COVID}\FloatTok{.19}\NormalTok{_Deaths }\OperatorTok{+}\StringTok{ }\NormalTok{urbanicity }\OperatorTok{+}\StringTok{ }\NormalTok{private_jail_flag }\OperatorTok{+}\StringTok{ }\NormalTok{pctblackjail }\OperatorTok{+}\StringTok{ }\NormalTok{pctlatinxjail }\OperatorTok{+}\StringTok{ }\NormalTok{pctwhitejail }\OperatorTok{+}\StringTok{ }\NormalTok{pctpretrial }\OperatorTok{+}\StringTok{ }\NormalTok{pctprison }\OperatorTok{+}\StringTok{ }\NormalTok{pctjailfromother }\OperatorTok{+}\StringTok{ }\NormalTok{pctcapacity , }\DataTypeTok{data =}\NormalTok{ jails, }\DataTypeTok{family =}\NormalTok{ binomial)}
+
+\NormalTok{model_aic <-}\StringTok{ }\KeywordTok{step}\NormalTok{(model, }\DataTypeTok{direction =} \StringTok{"backward"}\NormalTok{, }\DataTypeTok{trace=}\OtherTok{FALSE}\NormalTok{) }
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred
+
+## Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred
+
+## Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{tidy}\NormalTok{(model_aic, }\DataTypeTok{exponentiate =} \OtherTok{TRUE}\NormalTok{) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{select}\NormalTok{(term, estimate, p.value)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 11 x 3
+##    term                         estimate p.value
+##    <chr>                           <dbl>   <dbl>
+##  1 (Intercept)                   7.00e+1  0.448 
+##  2 County_Profile                1.10e+0  0.0956
+##  3 Jurisdiction_ProfileModerate  2.73e+0  0.267 
+##  4 Jurisdiction_ProfileLiberal   2.27e-1  0.183 
+##  5 urbanicitysmall/mid           6.81e-1  0.643 
+##  6 urbanicitysuburban            2.10e-9  0.992 
+##  7 urbanicityurban               9.23e+8  0.997 
+##  8 private_jail_flag1            2.18e+1  0.0447
+##  9 pctblackjail                  9.21e-1  0.147 
+## 10 pctwhitejail                  8.16e-1  0.0173
+## 11 pctpretrial                   1.02e+0  0.180
+\end{verbatim}
+
+There are not enough observations of urban parishes (only one) for us to
+include urbanicity in the model. There also does not appear to be a
+significant relationship, as shown in the model as well as the bar graph
+below.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{numrural <-}\StringTok{ }\NormalTok{jails }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{mutate}\NormalTok{(}\StringTok{`}\DataTypeTok{Low Population Counties (< 50000)}\StringTok{`}\NormalTok{ =}\StringTok{ }\NormalTok{Resident_population }\OperatorTok{<=}\StringTok{ }\DecValTok{50000}\NormalTok{) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{select}\NormalTok{(}\StringTok{`}\DataTypeTok{Low Population Counties (< 50000)}\StringTok{`}\NormalTok{, }\StringTok{`}\DataTypeTok{Above Average Decrease in Prisoners}\StringTok{`}\NormalTok{)}
+
+
+\NormalTok{numrural2 <-}\StringTok{ }\NormalTok{numrural }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{filter}\NormalTok{(}\StringTok{`}\DataTypeTok{Low Population Counties (< 50000)}\StringTok{`} \OperatorTok{==}\StringTok{ }\OtherTok{TRUE}\NormalTok{)}
+
+\NormalTok{plotrural <-}\StringTok{ }\KeywordTok{ggplot}\NormalTok{() }\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_bar}\NormalTok{(}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =} \StringTok{`}\DataTypeTok{Above Average Decrease in Prisoners}\StringTok{`}\NormalTok{), }\DataTypeTok{data =}\NormalTok{ numrural2, }\DataTypeTok{fill =} \StringTok{"green4"}\NormalTok{) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{y =} \StringTok{"Number of Low Population Counties"}\NormalTok{,}
+       \DataTypeTok{title =} \StringTok{"Rural Parishes are Not Substantially Reducing Jail Populations"}\NormalTok{)}
+
+\NormalTok{plotrural2 <-}\StringTok{ }\KeywordTok{ggplot}\NormalTok{() }\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_bar}\NormalTok{(}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =} \StringTok{`}\DataTypeTok{Low Population Counties (< 50000)}\StringTok{`}\NormalTok{, }\DataTypeTok{fill =} \StringTok{`}\DataTypeTok{Above Average Decrease in Prisoners}\StringTok{`}\NormalTok{), }\DataTypeTok{position =} \StringTok{"fill"}\NormalTok{, }\DataTypeTok{data =}\NormalTok{ numrural) }\OperatorTok{+}\StringTok{ }
+\StringTok{  }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{y =} \StringTok{"Relative Frequency"}\NormalTok{,}
+       \DataTypeTok{title =} \StringTok{"No relationship between population size and number of people released"}\NormalTok{)}
+
+\NormalTok{plotrural }\OperatorTok{|}\StringTok{ }\NormalTok{plotrural2}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{LACovid_files/figure-latex/unnamed-chunk-10-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{model_aug <-}\StringTok{ }\KeywordTok{augment}\NormalTok{(model_aic, }\DataTypeTok{type.predict =} \StringTok{"response"}\NormalTok{, }\DataTypeTok{type.residuals =} \StringTok{"response"}\NormalTok{) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{obs_num =} \KeywordTok{c}\NormalTok{(}\DecValTok{1}\OperatorTok{:}\DecValTok{55}\NormalTok{))}
+
+\NormalTok{residuals <-}\StringTok{ }\NormalTok{model_aug }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{select}\NormalTok{(obs_num, .resid)}
+
+\NormalTok{jails =}\StringTok{ }\KeywordTok{left_join}\NormalTok{(jails, residuals, }\DataTypeTok{by =}\NormalTok{ (}\StringTok{"obs_num"}\NormalTok{ =}\StringTok{ "obs_num"}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{diagnostics}{%
+\section{Diagnostics}\label{diagnostics}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{laplot <-}\KeywordTok{ggplot}\NormalTok{() }\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_sf}\NormalTok{(}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{geometry =}\NormalTok{ geom, }\DataTypeTok{fill =}\NormalTok{ .resid, }\DataTypeTok{color =}\NormalTok{ .resid), }\DataTypeTok{data =}\NormalTok{ jails) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{scale_fill_viridis}\NormalTok{(}\DataTypeTok{option =} \StringTok{"viridis"}\NormalTok{) }\OperatorTok{+}\StringTok{ }
+\StringTok{    }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{title =} \StringTok{"Residuals from Logistic Model"}\NormalTok{,}
+       \DataTypeTok{fill =} \StringTok{"Residual"}\NormalTok{,}
+       \DataTypeTok{color =} \StringTok{"Residual"}\NormalTok{,}
+       \DataTypeTok{caption =} \StringTok{"Parishes Excluded from Analysis in White"}\NormalTok{) }\OperatorTok{+}\StringTok{ }
+\StringTok{  }\KeywordTok{scale_color_viridis}\NormalTok{(}\DataTypeTok{option =} \StringTok{"viridis"}\NormalTok{) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_sf}\NormalTok{(}\DataTypeTok{data =}\NormalTok{ stategeo, }\DataTypeTok{fill =} \OtherTok{NA}\NormalTok{) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{theme}\NormalTok{(}\DataTypeTok{panel.background =} \KeywordTok{element_rect}\NormalTok{(}\DataTypeTok{fill =} \StringTok{"white"}\NormalTok{),}
+        \DataTypeTok{axis.text.y =} \KeywordTok{element_blank}\NormalTok{(),}
+        \DataTypeTok{axis.text.x =} \KeywordTok{element_blank}\NormalTok{(),}
+        \DataTypeTok{axis.ticks =} \KeywordTok{element_blank}\NormalTok{(),}
+         \DataTypeTok{axis.line =} \KeywordTok{element_blank}\NormalTok{())}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{leverage_threshold <-}\StringTok{ }\DecValTok{2}\OperatorTok{*}\NormalTok{(}\DecValTok{10} \OperatorTok{+}\StringTok{ }\DecValTok{1}\NormalTok{)}\OperatorTok{/}\KeywordTok{nrow}\NormalTok{(model_aug)}
+
+\NormalTok{high_leverage <-}\StringTok{ }\NormalTok{model_aug }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{high_lev =}\NormalTok{ .hat }\OperatorTok{>}\StringTok{ }\NormalTok{leverage_threshold) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{select}\NormalTok{(high_lev, obs_num)}
+
+\NormalTok{high_leverage }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{filter}\NormalTok{(high_lev }\OperatorTok{==}\StringTok{ }\OtherTok{TRUE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 5 x 2
+##   high_lev obs_num
+##   <lgl>      <int>
+## 1 TRUE          15
+## 2 TRUE          23
+## 3 TRUE          30
+## 4 TRUE          32
+## 5 TRUE          34
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{ggplot}\NormalTok{(}\DataTypeTok{data =}\NormalTok{ model_aug, }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ obs_num, }\DataTypeTok{y =}\NormalTok{ .std.resid)) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_point}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Warning: Removed 1 rows containing missing values (geom_point).
+\end{verbatim}
+
+\includegraphics{LACovid_files/figure-latex/std.residuals-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{model_aug }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{summarise}\NormalTok{(}\DataTypeTok{min =} \KeywordTok{min}\NormalTok{(.std.resid, }\DataTypeTok{na.rm =} \OtherTok{TRUE}\NormalTok{),}
+            \DataTypeTok{max =} \KeywordTok{max}\NormalTok{(.std.resid, }\DataTypeTok{na.rm =} \OtherTok{TRUE}\NormalTok{),}
+            \DataTypeTok{mean =} \KeywordTok{mean}\NormalTok{(.std.resid, }\DataTypeTok{na.rm =} \OtherTok{TRUE}\NormalTok{),}
+            \DataTypeTok{median =} \KeywordTok{median}\NormalTok{(.std.resid, }\DataTypeTok{na.rm =} \OtherTok{TRUE}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 1 x 4
+##     min   max    mean median
+##   <dbl> <dbl>   <dbl>  <dbl>
+## 1 -2.04  1.99 -0.0875 -0.248
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{high_sdresid <-}\StringTok{ }\NormalTok{model_aug }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{high_sd =} \KeywordTok{abs}\NormalTok{(.std.resid) }\OperatorTok{>}\StringTok{ }\DecValTok{2}\NormalTok{) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{select}\NormalTok{(obs_num, high_sd)}
+
+\NormalTok{high_sdresid }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{filter}\NormalTok{(high_sd }\OperatorTok{==}\StringTok{ }\OtherTok{TRUE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 1 x 2
+##   obs_num high_sd
+##     <int> <lgl>  
+## 1      33 TRUE
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{ggplot}\NormalTok{(}\DataTypeTok{data =}\NormalTok{ model_aug, }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ obs_num, }\DataTypeTok{y =}\NormalTok{ .cooksd)) }\OperatorTok{+}\StringTok{ }
+\StringTok{  }\KeywordTok{geom_point}\NormalTok{(}\DataTypeTok{alpha =} \FloatTok{0.5}\NormalTok{) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_hline}\NormalTok{(}\DataTypeTok{yintercept =} \DecValTok{1}\NormalTok{, }\DataTypeTok{color =} \StringTok{"red"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Warning: Removed 1 rows containing missing values (geom_point).
+\end{verbatim}
+
+\includegraphics{LACovid_files/figure-latex/cooksdistance-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{high_cookdist <-}\StringTok{ }\NormalTok{model_aug }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{high_cook =}\NormalTok{ .cooksd }\OperatorTok{>}\StringTok{ }\DecValTok{1}\NormalTok{) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{select}\NormalTok{(obs_num, high_cook)}
+
+\NormalTok{high_cookdist }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{filter}\NormalTok{(high_cook }\OperatorTok{==}\StringTok{ }\OtherTok{TRUE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## # A tibble: 0 x 2
+## # ... with 2 variables: obs_num <int>, high_cook <lgl>
+\end{verbatim}
+
+\hypertarget{plots-used-in-presentation}{%
+\section{Plots used in presentation}\label{plots-used-in-presentation}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{jails}\OperatorTok{$}\StringTok{`}\DataTypeTok{Above Average Decrease in Prisoners}\StringTok{`}\NormalTok{ =}\StringTok{ }\KeywordTok{as.factor}\NormalTok{(jails}\OperatorTok{$}\StringTok{`}\DataTypeTok{Above Average Decrease in Prisoners}\StringTok{`}\NormalTok{)}
+
+\NormalTok{jails}\OperatorTok{$}\StringTok{`}\DataTypeTok{Above Average Decrease in Prisoners}\StringTok{`}\NormalTok{=}\StringTok{ }\KeywordTok{recode}\NormalTok{(jails}\OperatorTok{$}\StringTok{`}\DataTypeTok{Above Average Decrease in Prisoners}\StringTok{`}\NormalTok{, }\StringTok{"TRUE"}\NormalTok{=}\StringTok{ "Yes"}\NormalTok{, }\StringTok{"FALSE"}\NormalTok{ =}\StringTok{ "No"}\NormalTok{)}
+
+\NormalTok{jurisdiction <-}\StringTok{ }\KeywordTok{ggplot}\NormalTok{(}\DataTypeTok{data =}\NormalTok{ jails) }\OperatorTok{+}
+\KeywordTok{geom_bar}\NormalTok{(}\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =}\NormalTok{ Jurisdiction_Profile, }\DataTypeTok{fill =} \StringTok{`}\DataTypeTok{Above Average Decrease in Prisoners}\StringTok{`}\NormalTok{), }\DataTypeTok{position =} \StringTok{"fill"}\NormalTok{, }\DataTypeTok{color =} \StringTok{"black"}\NormalTok{) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{scale_fill_brewer}\NormalTok{(}\DataTypeTok{type =} \StringTok{"seq"}\NormalTok{, }\DataTypeTok{palette =} \StringTok{"Greens"}\NormalTok{) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{scale_x_discrete}\NormalTok{(}\DataTypeTok{limits =} \KeywordTok{c}\NormalTok{(}\StringTok{"Liberal"}\NormalTok{, }\StringTok{"Moderate"}\NormalTok{, }\StringTok{"Conservative"}\NormalTok{)) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{theme}\NormalTok{(}\DataTypeTok{panel.background =} \KeywordTok{element_rect}\NormalTok{(}\DataTypeTok{fill =} \StringTok{"white"}\NormalTok{)) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{x =} \StringTok{"Polical Leaning of Judicial System"}\NormalTok{,}
+       \DataTypeTok{y =} \StringTok{"Relative Frequency"}\NormalTok{,}
+       \DataTypeTok{fill =} \StringTok{"Above Average}
+\StringTok{Decrease"}\NormalTok{,}
+       \DataTypeTok{title =} \StringTok{"Liberal Jurisdictions}
+\StringTok{Release Fewer People from Jail"}\NormalTok{,}
+       \DataTypeTok{caption =} \StringTok{"source: uslaw.org"}\NormalTok{)}
+       
+\NormalTok{jurisdiction }
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{LACovid_files/figure-latex/unnamed-chunk-11-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{private <-}\StringTok{ }\NormalTok{jails }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{group_by}\NormalTok{(private_jail_flag, }\StringTok{`}\DataTypeTok{Above Average Decrease in Prisoners}\StringTok{`}\NormalTok{) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{count}\NormalTok{()}
+
+\NormalTok{privateyes <-}\StringTok{ }\NormalTok{private }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{filter}\NormalTok{(private_jail_flag }\OperatorTok{==}\StringTok{ }\DecValTok{1}\NormalTok{)}
+
+\NormalTok{privateno <-}\StringTok{ }\NormalTok{private }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{filter}\NormalTok{(private_jail_flag }\OperatorTok{==}\StringTok{ }\DecValTok{0}\NormalTok{)}
+
+\NormalTok{privateyes <-}\StringTok{ }\NormalTok{privateyes }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{rename}\NormalTok{(}\DataTypeTok{Number =}\NormalTok{ n)}
+
+\NormalTok{privateno <-}\StringTok{ }\NormalTok{privateno  }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{rename}\NormalTok{(}\DataTypeTok{Number =}\NormalTok{ n)}
+
+
+
+\NormalTok{privateplot <-}\StringTok{ }\KeywordTok{ggplot}\NormalTok{(}\DataTypeTok{data =}\NormalTok{ privateyes, }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =} \StringTok{""}\NormalTok{, }\DataTypeTok{y =}\NormalTok{ Number, }\DataTypeTok{fill =} \StringTok{`}\DataTypeTok{Above Average Decrease in Prisoners}\StringTok{`}\NormalTok{)) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_bar}\NormalTok{(}\DataTypeTok{width =} \DecValTok{1}\NormalTok{, }\DataTypeTok{stat =} \StringTok{"identity"}\NormalTok{, }\DataTypeTok{color =} \StringTok{"white"}\NormalTok{) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{coord_polar}\NormalTok{(}\StringTok{"y"}\NormalTok{, }\DataTypeTok{start =} \DecValTok{0}\NormalTok{) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{theme_classic}\NormalTok{(}\DataTypeTok{base_size =} \DecValTok{13}\NormalTok{) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{scale_fill_brewer}\NormalTok{(}\DataTypeTok{type =} \StringTok{"seq"}\NormalTok{, }\DataTypeTok{palette =} \StringTok{"Greens"}\NormalTok{) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{labs}\NormalTok{(}\DataTypeTok{title =} \StringTok{"Private Jails Tend to Release More People}
+\StringTok{From Jail"}\NormalTok{,}
+  \DataTypeTok{subtitle =} \StringTok{"Private Jails"}\NormalTok{) }\OperatorTok{+}
+\StringTok{   }\KeywordTok{theme}\NormalTok{(}\DataTypeTok{panel.background =} \KeywordTok{element_rect}\NormalTok{(}\DataTypeTok{fill =} \StringTok{"white"}\NormalTok{),}
+        \DataTypeTok{axis.text.y =} \KeywordTok{element_blank}\NormalTok{(),}
+        \DataTypeTok{axis.text.x =} \KeywordTok{element_blank}\NormalTok{(),}
+        \DataTypeTok{axis.ticks =} \KeywordTok{element_blank}\NormalTok{(),}
+        \DataTypeTok{axis.title.x =} \KeywordTok{element_blank}\NormalTok{(),}
+        \DataTypeTok{axis.title.y =} \KeywordTok{element_blank}\NormalTok{(),}
+        \DataTypeTok{legend.position =} \StringTok{"none"}\NormalTok{,}
+        \DataTypeTok{axis.line =} \KeywordTok{element_blank}\NormalTok{())}
+
+\NormalTok{publicplot <-}\StringTok{ }\KeywordTok{ggplot}\NormalTok{(}\DataTypeTok{data =}\NormalTok{ privateno, }\KeywordTok{aes}\NormalTok{(}\DataTypeTok{x =} \StringTok{""}\NormalTok{, }\DataTypeTok{y =}\NormalTok{ Number, }\DataTypeTok{fill =} \StringTok{`}\DataTypeTok{Above Average Decrease in Prisoners}\StringTok{`}\NormalTok{)) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_bar}\NormalTok{(}\DataTypeTok{width =} \DecValTok{1}\NormalTok{, }\DataTypeTok{stat =} \StringTok{"identity"}\NormalTok{, }\DataTypeTok{color =} \StringTok{"white"}\NormalTok{) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{coord_polar}\NormalTok{(}\StringTok{"y"}\NormalTok{, }\DataTypeTok{start =} \DecValTok{0}\NormalTok{) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{theme_classic}\NormalTok{(}\DataTypeTok{base_line_size =} \DecValTok{13}\NormalTok{) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{scale_fill_brewer}\NormalTok{(}\DataTypeTok{type =} \StringTok{"seq"}\NormalTok{, }\DataTypeTok{palette =} \StringTok{"Greens"}\NormalTok{) }\OperatorTok{+}
+\KeywordTok{labs}\NormalTok{(}\DataTypeTok{fill =} \StringTok{"Above Average}
+\StringTok{Decrease"}\NormalTok{,}
+\DataTypeTok{subtitle =} \StringTok{"Public Jails"}\NormalTok{) }\OperatorTok{+}
+\StringTok{    }\KeywordTok{theme}\NormalTok{(}\DataTypeTok{panel.background =} \KeywordTok{element_rect}\NormalTok{(}\DataTypeTok{fill =} \StringTok{"white"}\NormalTok{),}
+        \DataTypeTok{axis.text.y =} \KeywordTok{element_blank}\NormalTok{(),}
+        \DataTypeTok{axis.text.x =} \KeywordTok{element_blank}\NormalTok{(),}
+        \DataTypeTok{axis.ticks =} \KeywordTok{element_blank}\NormalTok{(),}
+        \DataTypeTok{axis.title.x =} \KeywordTok{element_blank}\NormalTok{(),}
+        \DataTypeTok{axis.title.y =} \KeywordTok{element_blank}\NormalTok{(),}
+        \DataTypeTok{axis.line =} \KeywordTok{element_blank}\NormalTok{())}
+
+\NormalTok{privateplot }\OperatorTok{|}\StringTok{ }\NormalTok{publicplot}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{LACovid_files/figure-latex/unnamed-chunk-12-1.pdf}
+
+\hypertarget{references-in-presentation}{%
+\section{References in presentation:}\label{references-in-presentation}}
+
+\begin{enumerate}
+\def\labelenumi{(\arabic{enumi})}
+\item
+  Data from Vera Institute:
+  \url{https://www.vera.org/blog/covid-19-1/use-this-data-to-hold-your-local-jail-accountable-during-the-pandemic}
+\item
+  Jurisdiction Profiles USLaw 2019-2020 (political orientation):
+  \url{https://web.uslaw.org/resources/state-judicial-profiles-by-county/}
+\item
+  Political profile by Parish taken here:
+  \url{https://www.politico.com/2016-election/results/map/president/louisiana/}
+\item
+  Louisiana \#1 most incarcerated in the world:
+  \url{https://theintercept.com/2020/04/07/louisiana-coronavirus-prisons/}
+\end{enumerate}
+
+\end{document}
