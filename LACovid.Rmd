@@ -183,8 +183,6 @@ ggplot() +
         axis.ticks = element_blank()) 
 ```
 
-<<<<<<< HEAD
-=======
 ```{r}
 jails %>%
   summarise(mean = mean(pctblack, na.rm = TRUE),
@@ -194,8 +192,6 @@ jails %>%
   summarise(mean = mean(pctblackjail, na.rm = TRUE),
             median = median(pctblackjail, na.rm = TRUE))
 ```
-
->>>>>>> ea4a2a968c78426658094916ea94e20e75bdae10
 
 ```{r}
 ggplot() +
@@ -499,12 +495,14 @@ p25
 
 ```{r Step-wise Strategy for Model Fitting}
 model <- glm(ab_avg ~ County_Profile +
-                Jurisdiction_Profile + COVID.19_Deaths + urbanicity + private_jail_flag + pctblackjail + pctlatinxjail + pctwhitejail + pctpretrial + pctprison + pctjailfromother + pctcapacity , data = jails, family = binomial)
+                Jurisdiction_Profile + COVID.19_Deaths + urbanicity + private_jail_flag + pctblackjail +  pctwhitejail + pctpretrial + pctprison + pctjailfromother + pctcapacity , data = jails, family = binomial)
 
 model_aic <- step(model, direction = "backward", trace=FALSE) 
 
-tidy(model_aic) %>%
-  select(term, estimate, p.value)
+tidy(model_aic, exponentiate = TRUE) %>%
+  select(term, estimate, p.value) %>%
+  arrange(p.value)
+
 ```
 
 There are not enough observations of urban parishes (only one) for us to include urbanicity in the model. There also does not appear to be a significant relationship, as shown in the model as well as the bar graph below.
@@ -606,12 +604,8 @@ ggplot(data = residuals) +
 ```{r final model}
 model_final <- glm(ab_avg ~ County_Profile + urbanicity + private_jail_flag + pctblackjail + pctwhitejail , data = jails)
 
-<<<<<<< HEAD
-final_model <- tidy(model_final) 
-=======
 tidy(model_final, exponentiate = TRUE) %>%
   kable(format = "markdown", digits = 3)
->>>>>>> ea4a2a968c78426658094916ea94e20e75bdae10
 ```
 
 ```{r}
